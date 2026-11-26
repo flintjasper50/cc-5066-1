@@ -226,6 +226,28 @@ pre.cmd { background: #080b13; border: 1px solid var(--line); border-radius: 8px
 a.link { color: var(--accent); text-decoration: none; }
 a.link:hover { text-decoration: underline; }
 
+/* 受约束扩展表单 */
+.extend-box { margin: 10px 0 4px; padding: 9px 10px; border-radius: 9px;
+              border: 1px dashed #3a4a72; background: rgba(56,189,248,.05); }
+.extend-box .toggle { display: block; font-weight: 700; font-size: 12px; }
+#extend-fields { margin-top: 8px; border-top: 1px dashed #2b3654; padding-top: 8px; }
+#extend-fields .form-row { margin: 6px 0; }
+#f-seed-rect, #f-lock-edge, #f-forbid {
+  width: 100%; background: #0b0e17; border: 1px solid var(--line);
+  border-radius: 7px; padding: 6px 8px; color: var(--text);
+  font-size: 12px; font-family: ui-monospace, monospace;
+}
+#f-forbid { resize: vertical; min-height: 44px; }
+#f-seed-rect:focus, #f-lock-edge:focus, #f-forbid:focus { border-color: #3b82f6; outline: none; }
+
+/* 样本框选画布 */
+.sample-select { margin-top: 10px; padding: 10px; border-radius: 9px;
+                 border: 1px solid var(--line); background: var(--panel2); }
+#pick-canvas { display: block; margin: 8px auto 4px; cursor: crosshair;
+               border: 1px solid var(--line); border-radius: 6px;
+               image-rendering: pixelated; touch-action: none; }
+#pick-info { text-align: center; font-variant-numeric: tabular-nums; }
+
 @media (max-width: 1180px) {
   body { overflow: auto; height: auto; }
   .layout { grid-template-columns: 1fr; }

@@ -1,7 +1,332 @@
 {
  "version": 1,
- "generated_at": "2026-11-26T10:54:10+00:00",
+ "generated_at": "2026-11-26T15:39:43+00:00",
  "runs": [
+  {
+   "run_id": "extend_diagonal_5_d3bd9019",
+   "title": "受约束扩展 · diagonal · seed 5",
+   "group": "extend",
+   "created_at": "2026-11-26T15:39:43+00:00",
+   "config": {
+    "out_w": 192,
+    "out_h": 192,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 5,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "warning",
+   "warnings": [
+    "1/15 个图块的规划切缝 RMSE 超过失败线 0.17（已在图上红框标出）。",
+    "自相关在位移 [10, 21] 处出现 0.80 的强峰，存在周期性重复。"
+   ],
+   "infos": [
+    "1 个图块因禁区围死端点且候选池无解，已保留邻块像素维持覆盖完整（局部绕不开，需放宽禁区）。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.09262209636223188,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.09726531546246986,
+     "seam_pair_count": 998
+    },
+    "straight_seam": {
+     "seam_rmse": 0.09256532928528241,
+     "seam_pair_count": 1032
+    },
+    "seam_improvement_vs_straight_pct": -5.07748010348701,
+    "periodic": {
+     "edge_lr_rmse": 0.19541530311107635,
+     "edge_tb_rmse": 0.17309024930000305,
+     "edge_rmse": 0.18459059441468173
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.19541530311107635,
+     "edge_tb_rmse": 0.17309024930000305,
+     "edge_rmse": 0.18459059441468173
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.0
+    },
+    "repetition": {
+     "distinct_source_tiles": 15,
+     "placements": 15,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 0,
+     "max_source_iou": 0.20754716981132076
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.8016079068183899,
+     "autocorr_lag": [
+      10,
+      21
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.007666666666666666,
+     "dup_pair_rmse_median": 0.27736926078796387
+    },
+    "orientation": {
+     "orientation_coherence": 0.9873335361480713,
+     "orientation_deg": 44.906700134277344
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "diagonal",
+      "name": "斜纹原图",
+      "natural_adj_rmse": 0.09262209636223188,
+      "orientation_coherence": 0.9892496466636658,
+      "orientation_deg": 44.989261627197266
+     }
+    ],
+    "elapsed_sec": 0.3,
+    "seam_to_natural_ratio": 1.050130792571127,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    },
+    "extension": {
+     "coverage_complete": true,
+     "hole_pixels": 0,
+     "protected_identical": true,
+     "locked_edges_identical": true,
+     "provenance_exact": true,
+     "seam_to_natural": 1.050130792571127,
+     "constraint_unresolved": 1
+    }
+   },
+   "anchors_x": [
+    0,
+    43,
+    85,
+    128
+   ],
+   "anchors_y": [
+    0,
+    43,
+    85,
+    128
+   ],
+   "n_placements": 15,
+   "samples": [
+    {
+     "id": "diagonal",
+     "name": "斜纹原图",
+     "role": "斜纹：用于沿接缝回读像素来源，验证修补未改锁边",
+     "meta": {
+      "seed": 7505,
+      "kind": "diagonal",
+      "angle_deg": 45.0,
+      "period": 22.0
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/extend_diagonal_5_d3bd9019/result.png",
+    "seams": "output/runs/extend_diagonal_5_d3bd9019/seams.png",
+    "provenance_id": "output/runs/extend_diagonal_5_d3bd9019/provenance_id.png",
+    "provenance_xy": "output/runs/extend_diagonal_5_d3bd9019/provenance_xy.png",
+    "tile_grid": "output/runs/extend_diagonal_5_d3bd9019/tile_grid.png",
+    "straight": "output/runs/extend_diagonal_5_d3bd9019/straight.png",
+    "naive_tile": "output/runs/extend_diagonal_5_d3bd9019/naive_tile.png",
+    "tileid": "output/runs/extend_diagonal_5_d3bd9019/tileid.png",
+    "patch_wall": "output/runs/extend_diagonal_5_d3bd9019/patch_wall.png",
+    "comparison": "output/runs/extend_diagonal_5_d3bd9019/comparison.png",
+    "sample_0": "output/runs/extend_diagonal_5_d3bd9019/sample_0.png",
+    "source_map_npz": "output/runs/extend_diagonal_5_d3bd9019/source_map.npz",
+    "extension": "output/runs/extend_diagonal_5_d3bd9019/extension.png",
+    "extension_check_npz": "output/runs/extend_diagonal_5_d3bd9019/extension_check.npz"
+   },
+   "extension": {
+    "coverage": {
+     "width": 192,
+     "height": 192,
+     "covered_pixels": 36864,
+     "total_pixels": 36864,
+     "hole_pixels": 0,
+     "complete": true
+    },
+    "locked_edges": [
+     {
+      "name": "locked-edge",
+      "identical": true,
+      "changed_pixels": 0,
+      "pixels": 140,
+      "max_abs_delta": 0.0
+     }
+    ],
+    "protected": {
+     "seed_pixels": 9216,
+     "changed_pixels": 0,
+     "identical": true
+    },
+    "provenance": {
+     "pixels_checked": 36864,
+     "mismatch_pixels": 0,
+     "max_abs_delta": 0.0,
+     "exact": true,
+     "seam_side": {
+      "available": true,
+      "seam_x": 84,
+      "rows_checked": 64,
+      "mismatch": 0,
+      "exact": true
+     }
+    },
+    "seam": {
+     "seam_rmse": 0.09726531546246986,
+     "seam_pair_count": 998,
+     "natural_floor": 0.09262209636223188,
+     "seam_to_natural": 1.050130792571127
+    },
+    "spec": {
+     "seed_rect": [
+      0,
+      0,
+      96,
+      96
+     ],
+     "place_at": [
+      0,
+      0
+     ],
+     "lock_edge": [
+      30,
+      10,
+      32,
+      80
+     ],
+     "forbidden": [
+      [
+       140,
+       20,
+       150,
+       60
+      ]
+     ],
+     "borrow_endpoint": true
+    },
+    "engine": {
+     "constraint_events": [
+      {
+       "tile": 4,
+       "ix": 1,
+       "iy": 1,
+       "infeasible_regions": [
+        "left"
+       ],
+       "stage": "initial",
+       "resolved_by": "none"
+      }
+     ],
+     "seed_placements": [
+      {
+       "ix": 0,
+       "iy": 0,
+       "anchor": [
+        0,
+        0
+       ],
+       "patch_size": 64,
+       "decision": "seed-kept",
+       "reason": "扩展起点：该图块核心像素来自框选样本，保持不动"
+      }
+     ],
+     "pin_notes": [
+      {
+       "ix": 1,
+       "iy": 1,
+       "kind": "left",
+       "start": 36,
+       "anchor": [
+        43,
+        43
+       ]
+      }
+     ],
+     "dirty_tiles": [
+      {
+       "name": "forbid-0",
+       "rect": {
+        "x0": 140,
+        "y0": 20,
+        "x1": 150,
+        "y1": 60
+       },
+       "dirty_tiles": [
+        [
+         2,
+         0
+        ],
+        [
+         3,
+         0
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         3,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    "seed_info": {
+     "sample_id": "diagonal",
+     "sample_name": "斜纹原图",
+     "seed_rect": [
+      0,
+      0,
+      96,
+      96
+     ],
+     "place_at": [
+      0,
+      0
+     ],
+     "filled_pixels": 9216
+    }
+   }
+  },
   {
    "run_id": "markers_stress_per_s910",
    "title": "压力测试 · 周期闭环 + 小 patch · seed 910",

@@ -194,6 +194,39 @@ def build_comparison(path, panels: list[tuple[str, np.ndarray]], target_h: int =
     board.save(path)
 
 
+def render_extension_overlay(result: np.ndarray, seed_mask: np.ndarray,
+                             own: np.ndarray, placements: list[dict],
+                             spec, periodic: bool) -> np.ndarray:
+    """扩展自检叠加：框选种子(蓝)、锁定边(绿)、禁区(红)、新图块编号。"""
+    h, w = result.shape[:2]
+    base = Image.fromarray((np.clip(result, 0, 1) * 255).astype(np.uint8)).convert("RGBA")
+    tint = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    td = ImageDraw.Draw(tint)
+    # 受保护种子：淡蓝
+    ys, xs = np.nonzero(seed_mask)
+    if len(ys):
+        td.rectangle([int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())],
+                     fill=(56, 132, 220, 70), outline=(80, 170, 255, 220), width=2)
+    if getattr(spec, "lock_edge", None):
+        x0, y0, x1, y1 = spec.lock_edge
+        td.rectangle([x0, y0, x1 - 1, y1 - 1], outline=(52, 211, 153, 255), width=2)
+    for fr in getattr(spec, "forbidden", []) or []:
+        x0, y0, x1, y1 = fr
+        td.rectangle([x0, y0, x1 - 1, y1 - 1], outline=(248, 113, 113, 255), width=2)
+    im = Image.alpha_composite(base, tint)
+    dr = ImageDraw.Draw(im)
+    for p in placements:
+        rcs = p.get("rects") or []
+        col = (253, 224, 71, 230)
+        for rc in rcs:
+            dr.rectangle([rc["x"], rc["y"], rc["x"] + rc["w"] - 1,
+                          rc["y"] + rc["h"] - 1], outline=col, width=1)
+        if rcs and p.get("id") is not None:
+            dr.text((rcs[0]["x"] + 2, rcs[0]["y"] + 1), str(p["id"]),
+                    fill=(255, 240, 150, 255))
+    return np.asarray(im.convert("RGB")).astype(np.float32) / 255.0
+
+
 def save_all_core_images(run_dir, result: np.ndarray, seams_img: np.ndarray,
                          prov_id: np.ndarray, prov_xy: np.ndarray,
                          grid_img: np.ndarray) -> dict:

@@ -90,6 +90,32 @@
           <label><input type="checkbox" id="f-periodic"> 周期连接（首尾纳入求解）</label>
         </div>
       </div>
+
+      <div class="extend-box">
+        <label class="toggle"><input type="checkbox" id="f-extend"> 受约束纹理扩展（框选样本 → 向外拼接）</label>
+        <div id="extend-fields" class="hidden">
+          <div class="hint">在下方样本图上拖拽框选一块纹理作为<strong>受保护种子</strong>；
+            可选锁定细边、加接缝禁区、借用端点。生成后核对“覆盖完整/受保护恒等/像素来源一致”。</div>
+          <div class="form-row">
+            <label>框选样本区域（x0,y0,x1,y1，样本坐标）</label>
+            <input type="text" id="f-seed-rect" placeholder="例如 0,0,96,96">
+          </div>
+          <div class="form-row check">
+            <label><input type="checkbox" id="f-lock-edge-on"> 锁一条不能重写的细边</label>
+          </div>
+          <div class="form-row hidden" id="lock-row">
+            <label>锁定细边（画布坐标，须在框选区内）</label>
+            <input type="text" id="f-lock-edge" placeholder="例如 30,10,32,80">
+          </div>
+          <div class="form-row">
+            <label>接缝禁区（画布坐标；每行一个 x0,y0,x1,y1）</label>
+            <textarea id="f-forbid" rows="2" placeholder="例如 140,20,150,60"></textarea>
+          </div>
+          <div class="form-row check">
+            <label><input type="checkbox" id="f-borrow"> 让相邻接缝借用锁定边端点</label>
+          </div>
+        </div>
+      </div>
       <button id="btn-generate" class="btn primary block">生成（同种子可复现）</button>
       <div id="gen-status" class="hint"></div>
     </section>
@@ -121,6 +147,11 @@
         <div id="hover-tip" class="hover-tip hidden"></div>
       </div>
       <div class="sample-strip" id="sample-strip"></div>
+      <div class="sample-select hidden" id="sample-select">
+        <div class="hint">在样本图上拖拽框选纹理区域（用作受保护种子）：</div>
+        <canvas id="pick-canvas"></canvas>
+        <div class="hint" id="pick-info">尚未框选</div>
+      </div>
     </div>
   </section>
 
@@ -155,6 +186,26 @@
         <h3>两张样片锚点互斥时</h3>
         <p>“重排”会对外观容差内的候选预先计算切缝代价并改选最容易缝合的来源；
         “重采样”会重新抽取来源（同样片→邻接来源→任意来源）。所有尝试与随机数都记录在案。</p>
+        <h3>受约束纹理扩展（框选种子）</h3>
+        <p>勾选“受约束纹理扩展”后，在中间样本图上<strong>拖拽框选</strong>一块纹理，
+        它会被当作<strong>受保护种子</strong>直接落到画布左上角，只有框外的新像素由图块拼接生成。
+        可另加<strong>锁定细边</strong>（画布坐标，须在框选区内，永不重写）、
+        <strong>接缝禁区</strong>（每行一个矩形，只约束切缝路径、不产生孔洞）、
+        以及<strong>借用锁边端点</strong>（让相邻接缝从锁定边端点出发）。</p>
+        <p>生成后“指标与失败”页的<strong>扩展自检</strong>面板会核对：覆盖完整性（无孔洞）、
+        受保护像素恒等、锁定细边恒等、逐像素来源一致（画布像素等于样本 <code>map_y,map_x</code> 处像素）、
+        以及接缝/自然地板比值，并在叠加图上用蓝框标种子、绿框标锁边、红框标禁区。
+        禁区若把某条接缝端点整个围住而无法局部绕开，会记 <code>resolved_by: none</code> 且不制造孔洞。
+        这走的是同一个内核（<code>quiltstudio.extend</code>），失败自检会写进 run.json 并让状态转为 failure。</p>
+        <h3>界面怎样启动</h3>
+        <ul>
+          <li><strong>在线生成模式</strong>：在本仓库根目录运行 <code>python3 cli.py serve</code>
+            （等价于 <code>python3 server.py</code>），然后浏览器打开
+            <code>http://127.0.0.1:8765</code>。此模式下表单可调参、框选、点击“生成”并实时落库。</li>
+          <li><strong>只读模式</strong>：直接双击 <code>web/index.html</code>（file://）只能浏览已生成的
+            run，不能在线生成。</li>
+          <li>离线预生成数据用 <code>python3 run_all.py</code> 产出，刷新页面即可看到全部 run。</li>
+        </ul>
         <h3>生成限制（重要）</h3>
         <ul>
           <li>全局像素指标无法判断语义：被切半的圆圈/箭头可能像素误差不高但视觉已坏。</li>

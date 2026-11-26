@@ -38,6 +38,27 @@ def cmd_run(args):
         "patch": args.patch, "overlap": args.overlap,
         "periodic": args.periodic, "policy": args.policy,
     }
+    if args.extend:
+        if not args.seed_rect:
+            raise SystemExit("--extend 需要 --seed-rect x0,y0,x1,y1")
+        def rect(s):
+            vals = [int(v) for v in s.split(",")]
+            if len(vals) != 4:
+                raise SystemExit(f"矩形需 4 个整数: {s}")
+            return vals
+
+        def pt(s):
+            vals = [int(v) for v in s.split(",")]
+            if len(vals) != 2:
+                raise SystemExit(f"坐标需 2 个整数: {s}")
+            return vals
+        params["extend"] = {
+            "seed_rect": rect(args.seed_rect),
+            "place_at": pt(args.place_at) if args.place_at else [0, 0],
+            "lock_edge": rect(args.lock_edge) if args.lock_edge else None,
+            "forbidden": [rect(f) for f in (args.forbid or [])],
+            "borrow_endpoint": args.borrow_endpoint,
+        }
     if args.images:
         # 把用户图片复制进 uploads，保持与服务一致的解析路径
         import shutil
@@ -52,7 +73,7 @@ def cmd_run(args):
         params["sample"] = "upload"
         params["uploads"] = names
     rj = generate(params)
-    print(json.dumps({
+    out = {
         "run_id": rj["run_id"], "status": rj["status"],
         "warnings": rj["warnings"], "infos": rj["infos"],
         "metrics": {"seam_rmse": rj["metrics"]["seam"]["seam_rmse"],
@@ -61,7 +82,10 @@ def cmd_run(args):
         "result": rj["files"].get("result"),
         "run_json": f"output/runs/{rj['run_id']}/run.json",
         "reproduce": rj["reproduce_command"],
-    }, ensure_ascii=False, indent=2))
+    }
+    if "extension" in rj:
+        out["extension"] = rj["metrics"]["extension"]
+    print(json.dumps(out, ensure_ascii=False, indent=2))
 
 
 def cmd_batch(args):
@@ -82,7 +106,7 @@ def main():
 
     r = sub.add_parser("run", help="执行一次合成")
     r.add_argument("--sample", default="grain",
-                   choices=["grain", "stripes", "markers", "conflict"])
+                   choices=["grain", "stripes", "markers", "conflict", "diagonal"])
     r.add_argument("--images", nargs="*", help="用户自制纹理路径（可给 1~2 张）")
     r.add_argument("--seed", type=int, default=20261126)
     r.add_argument("--width", type=int, default=384)
@@ -92,6 +116,15 @@ def main():
     r.add_argument("--periodic", action="store_true", help="求解周期首尾约束")
     r.add_argument("--policy", default="adaptive",
                    choices=["off", "reroute", "resample", "adaptive"])
+    r.add_argument("--extend", action="store_true",
+                   help="受约束扩展：先框选样本区作受保护种子再向外拼接")
+    r.add_argument("--seed-rect", help="框选样本区域 x0,y0,x1,y1（样本坐标）")
+    r.add_argument("--place-at", help="框选落位到画布左上角 x,y")
+    r.add_argument("--lock-edge", help="锁定细边 x0,y0,x1,y1（画布坐标，须在框选区内）")
+    r.add_argument("--forbid", action="append",
+                   help="接缝禁区 x0,y0,x1,y1（可重复）")
+    r.add_argument("--borrow-endpoint", action="store_true",
+                   help="让相邻接缝借用锁定细边端点")
     r.set_defaults(func=cmd_run)
 
     b = sub.add_parser("batch", help="运行全部 22 个检验实验")

@@ -24,10 +24,11 @@ const GROUP_LABELS = {
   'markers-periodic': '独特标记 · 周期闭环',
   conflict: '互斥锚点 A/B 双样片',
   stress: '压力测试 / 可见失败',
+  extend: '受约束纹理扩展（框选 / 锁边 / 禁区）',
   custom: '自定义生成',
 };
 const GROUP_ORDER = ['grain', 'stripes', 'markers', 'grain-periodic',
-  'stripes-periodic', 'markers-periodic', 'conflict', 'stress', 'custom'];
+  'stripes-periodic', 'markers-periodic', 'conflict', 'stress', 'extend', 'custom'];
 
 const state = {
   manifest: null,
@@ -129,6 +130,10 @@ async function selectRun(id) {
   renderMetrics();
   renderInspectEmpty();
   preloadSampleImages();
+  if ($('#f-extend') && $('#f-extend').checked) {
+    state.pickRect = null;
+    setTimeout(() => { setupSamplePicker(); bindPicker(); }, 50);
+  }
   requestAnimationFrame(fitOverlay);
 }
 
@@ -267,6 +272,105 @@ $('#overlay').addEventListener('click', e => {
   if (p) renderInspect(p); else renderInspectEmpty();
   drawOverlay();
 });
+
+/* ---------------- 样本框选（受约束扩展的种子） ---------------- */
+
+// 选中的样片索引与框选结果（样本坐标），供扩展表单使用。
+state.pickSample = 0;
+state.pickRect = null;
+
+function setupSamplePicker() {
+  const cv = $('#pick-canvas');
+  if (!cv) return;
+  const r = state.run;
+  const im = state.sampleImages[state.pickSample];
+  const drawBase = () => {
+    const src = im || new Image();
+    const nw = src.naturalWidth || 256, nh = src.naturalHeight || 256;
+    const scale = Math.min(320 / nw, 320 / nh);
+    cv.width = Math.round(nw * scale);
+    cv.height = Math.round(nh * scale);
+    cv.dataset.scale = scale;
+    cv.dataset.nw = nw;
+    cv.dataset.nh = nh;
+    renderPickRect();
+  };
+  if (im && im.complete) drawBase();
+  else if (im) im.onload = drawBase;
+  else drawBase();
+}
+
+function renderPickRect() {
+  const cv = $('#pick-canvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  const im = state.sampleImages[state.pickSample];
+  if (im && im.complete) ctx.drawImage(im, 0, 0, cv.width, cv.height);
+  const pick = state.pickRect;
+  if (pick) {
+    const [x0, y0, x1, y1] = screenshotToCanvas(pick);
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+    ctx.fillStyle = 'rgba(56,189,248,.12)';
+    ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+  }
+}
+
+function screenshotToCanvas(rect) {
+  const cv = $('#pick-canvas');
+  const s = Number(cv.dataset.scale || 1);
+  return [rect[0] * s, rect[1] * s, rect[2] * s, rect[3] * s];
+}
+
+function canvasToSample(px, py) {
+  const cv = $('#pick-canvas');
+  const s = Number(cv.dataset.scale || 1);
+  return [Math.round(px / s), Math.round(py / s)];
+}
+
+let pickDrag = null;
+function bindPicker() {
+  const cv = $('#pick-canvas');
+  if (!cv || cv.dataset.bound) return;
+  cv.dataset.bound = '1';
+  cv.addEventListener('mousedown', e => {
+    const rect = cv.getBoundingClientRect();
+    pickDrag = canvasToSample(e.clientX - rect.left, e.clientY - rect.top);
+  });
+  cv.addEventListener('mousemove', e => {
+    if (!pickDrag) return;
+    const rect = cv.getBoundingClientRect();
+    const cur = canvasToSample(e.clientX - rect.left, e.clientY - rect.top);
+    state.pickRect = [Math.min(pickDrag[0], cur[0]), Math.min(pickDrag[1], cur[1]),
+                      Math.max(pickDrag[0], cur[0]), Math.max(pickDrag[1], cur[1])];
+    renderPickRect();
+  });
+  window.addEventListener('mouseup', () => {
+    if (!pickDrag) return;
+    pickDrag = null;
+    if (state.pickRect && (state.pickRect[2] - state.pickRect[0] > 4)
+        && (state.pickRect[3] - state.pickRect[1] > 4)) {
+      $('#f-seed-rect').value = state.pickRect.join(',');
+      $('#pick-info').textContent =
+        `框选样本区域：${state.pickRect.join(',')}（${state.pickRect[2]-state.pickRect[0]}×${state.pickRect[3]-state.pickRect[1]}）`;
+    } else {
+      state.pickRect = null;
+      renderPickRect();
+    }
+  });
+}
+
+function togglePicker() {
+  const on = $('#f-extend').checked;
+  $('#extend-fields').classList.toggle('hidden', !on);
+  $('#sample-select').classList.toggle('hidden', !on);
+  if (on) {
+    setupSamplePicker();
+    bindPicker();
+  }
+}
 
 /* ---------------- 图块检查器 ---------------- */
 
@@ -431,6 +535,35 @@ function anchorCards(m) {
       </div>`;
 }
 
+function extensionCards(r) {
+  const ext = r.metrics && r.metrics.extension;
+  if (!ext) return '';
+  const ok = v => v ? 'good' : 'bad';
+  const rep = r.extension || {};
+  const prov = rep.provenance || {};
+  const cov = rep.coverage || {};
+  return `
+    <div class="section-title">受约束扩展自检（框选种子 / 锁边 / 禁区）</div>
+    <div class="metric-grid">
+      ${metricCard('覆盖完整性', ext.coverage_complete ? '完整' : ('缺 ' + ext.hole_pixels + 'px'),
+                   ok(ext.coverage_complete))}
+      ${metricCard('受保护像素', ext.protected_identical ? '恒等' : '被改写',
+                   ok(ext.protected_identical))}
+      ${metricCard('锁定细边', ext.locked_edges_identical ? '恒等' : '被改写',
+                   ok(ext.locked_edges_identical))}
+      ${metricCard('像素来源一致', ext.provenance_exact ? '一致' : '不符',
+                   ok(ext.provenance_exact))}
+      ${metricCard('接缝/自然地板', f3(ext.seam_to_natural || 0), '')}
+      ${metricCard('禁区无解图块', ext.constraint_unresolved || 0,
+                   (ext.constraint_unresolved || 0) > 0 ? 'mid' : 'good')}
+    </div>
+    <div class="kv" style="margin-top:6px">
+      <span class="k">受保护种子</span><span>${cov.covered_pixels || 0}/${cov.total_pixels || 0} 像素已覆盖，孔洞 ${cov.hole_pixels ?? 0}</span>
+      <span class="k">来源回读</span><span>校验 ${prov.pixels_checked || 0} 像素，失配 ${prov.mismatch_pixels || 0}</span>
+      ${prov.seam_side && prov.seam_side.available ? `<span class="k">沿缝两侧</span><span>缝 x=${prov.seam_side.seam_x}，比对 ${prov.seam_side.rows_checked} 点，失配 ${prov.seam_side.mismatch}</span>` : ''}
+    </div>`;
+}
+
 function renderMetrics() {
   const r = state.run, m = r.metrics, cfg = r.config;
   const ref = m.samples.reduce((a, s) => Math.min(a, s.natural_adj_rmse), 1);
@@ -450,6 +583,8 @@ function renderMetrics() {
 
     ${r.warnings.map(w => `<div class="warnbox">⚠ ${esc(w)}</div>`).join('')}
     ${(r.infos || []).map(w => `<div class="infobox">ℹ ${esc(w)}</div>`).join('')}
+
+    ${extensionCards(r)}
 
     <div class="section-title">接缝误差（合成后沿真实 tile 边界测量）</div>
     <div class="metric-grid">
@@ -572,6 +707,16 @@ async function uploadFiles(files) {
   }
 }
 
+function parseRect(s) {
+  const v = String(s || '').split(',').map(x => Number(x.trim()));
+  if (v.length !== 4 || v.some(Number.isNaN)) return null;
+  return v;
+}
+
+$('#f-extend').onchange = togglePicker;
+$('#f-lock-edge-on').onchange = e =>
+  $('#lock-row').classList.toggle('hidden', !e.target.checked);
+
 $('#btn-generate').onclick = async () => {
   const status = $('#gen-status');
   const sample = $('#f-sample').value;
@@ -593,7 +738,24 @@ $('#btn-generate').onclick = async () => {
       periodic: $('#f-periodic').checked,
       policy: $('#f-policy').value,
     };
-    status.textContent = '合成中（含硬切基线，约 1–5 秒）…';
+    if ($('#f-extend').checked) {
+      const seedRect = parseRect($('#f-seed-rect').value) || state.pickRect;
+      if (!seedRect) throw new Error('请先在样本图上框选，或填写 seed-rect');
+      params.extend = {
+        seed_rect: seedRect,
+        place_at: [0, 0],
+        lock_edge: $('#f-lock-edge-on').checked
+          ? parseRect($('#f-lock-edge').value) : null,
+        forbidden: $('#f-forbid').value.split('\n')
+          .map(s => s.trim()).filter(Boolean)
+          .map(parseRect).filter(Boolean),
+        borrow_endpoint: $('#f-borrow').checked,
+      };
+      if (params.extend.lock_edge === null && $('#f-lock-edge-on').checked) {
+        throw new Error('已勾选锁定细边但矩形无效');
+      }
+    }
+    status.textContent = '合成中（含受约束扩展与自检，约 1–5 秒）…';
     const r = await fetch('/api/generate', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),

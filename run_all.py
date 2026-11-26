@@ -11,6 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent / ".pydeps"))
 
 from quiltstudio.engine import QuiltConfig
+from quiltstudio.extend import ExtendSpec
 from quiltstudio.pipeline import OUT_ROOT, execute, write_manifest
 from quiltstudio.samples import build_prepared
 import json
@@ -20,10 +21,11 @@ def main():
     prepared = build_prepared()
     runs = []
 
-    def add(group, run_id, title, samples, **kw):
+    def add(group, run_id, title, samples, extend_spec=None, **kw):
         cfg = QuiltConfig(**kw)
         print(f"[run] {run_id} ...", flush=True)
-        rj = execute(samples, cfg, run_id=run_id, title=title, group=group)
+        rj = execute(samples, cfg, run_id=run_id, title=title, group=group,
+                     extend_spec=extend_spec)
         m = rj["metrics"]
         print(f"       status={rj['status']} seam={m['seam']['seam_rmse']:.4f} "
               f"straight={m['straight_seam']['seam_rmse']:.4f} "

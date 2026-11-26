@@ -266,12 +266,41 @@ def make_conflict_pair(seed: int = 7404, size: int = 288) -> list[Sample]:
     return [a, b]
 
 
+def make_diagonal(seed: int = 7505, size: int = 256,
+                  angle_deg: float = 45.0, period: float = 22.0) -> Sample:
+    """斜纹原图：颜色沿固定对角方向渐变，便于逐像素回读来源验证。
+
+    斜纹的相位随坐标单调变化，因此“某像素取自样本的哪个坐标”可以被
+    反查校验：沿接缝两侧各取一行，按 map_y/map_x 回读样本颜色，必须与
+    画布像素逐值相等，否则说明修补过程暗中改写了像素（模糊/覆盖）。
+    """
+    rng = _rng(seed)
+    yy, xx = np.mgrid[0:size, 0:size].astype(np.float32)
+    th = np.deg2rad(angle_deg)
+    q = xx * np.cos(th) + yy * np.sin(th)
+    # 轻微弯曲让纹理不至于完全平直，但保持单调可回读
+    warp = _smooth_noise(rng, size, 8, 1.4)
+    phase = 2 * np.pi * (q + warp) / period
+    t = 0.5 + 0.5 * np.sin(phase)
+    c0 = np.array([0.12, 0.18, 0.26], np.float32)
+    c1 = np.array([0.86, 0.72, 0.42], np.float32)
+    img = c0 + (c1 - c0) * t[..., None]
+    ridge = (np.sin(phase * 3.0 + 0.9) > 0.86).astype(np.float32)[..., None]
+    img = img * (1 - 0.35 * ridge) + np.array([0.95, 0.93, 0.88], np.float32) * (0.35 * ridge)
+    img += rng.normal(0, 0.018, img.shape).astype(np.float32)
+    return Sample("diagonal", "斜纹原图", np.clip(img, 0, 1),
+                  role="斜纹：用于沿接缝回读像素来源，验证修补未改锁边",
+                  meta={"seed": seed, "kind": "diagonal",
+                        "angle_deg": angle_deg, "period": period})
+
+
 def build_prepared() -> dict[str, list[Sample]]:
     return {
         "grain": [make_grain()],
         "stripes": [make_stripes()],
         "markers": [make_markers()],
         "conflict": make_conflict_pair(),
+        "diagonal": [make_diagonal()],
     }
 
 

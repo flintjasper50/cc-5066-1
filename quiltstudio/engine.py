@@ -8,8 +8,14 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .mincut import min_cut_path, path_energy, straight_path
+from .geometry import (anchor_gaps, build_anchors, build_regions,
+                       partition_report, region_coords)
+from .mincut import (min_cut_path, min_cut_path_constrained, path_energy,
+                     straight_path)
 from .samples import Sample
+
+# 约束无解时规划代价的哨兵值（JSON 安全，远高于任何真实 RMSE）。
+NO_SOLUTION_RMSE = 1.0e6
 
 
 def _natural_adj_rmse(img: np.ndarray) -> float:
@@ -66,70 +72,28 @@ def normalize_config(cfg: QuiltConfig, samples: list[Sample]) -> tuple[QuiltConf
     return c, notes
 
 
-def make_anchors(length: int, patch: int, overlap: int, periodic: bool) -> list[int]:
-    step = patch - overlap
-    if periodic:
-        n = max(2, int(round(length / step)))
-        xs = [int(round(i * length / n)) for i in range(n)]
-        return xs
-    if length <= patch:
-        return [0]
-    span = length - patch
-    n = max(2, int(round(span / step)) + 1)
-    xs = sorted({int(round(i * span / (n - 1))) for i in range(n)})
-    return xs
+# 兼容旧导入路径：几何实现已迁到 geometry.py
+make_anchors = build_anchors
 
 
-def build_regions(ix: int, iy: int, xs: list[int], ys: list[int],
-                  w: int, h: int, b: int, periodic: bool) -> list[dict]:
-    """构造互不相交的重叠矩形区域（局部 patch 坐标，半开区间）。"""
-    ax, ay = xs[ix], ys[iy]
-    left_w = b - (ax - xs[ix - 1]) if ix > 0 else 0
-    close_c0, close_w = b, 0
-    if periodic and ix == len(xs) - 1:
-        close_c0 = w - ax
-        close_w = b - close_c0
-    cleft = left_w if ix > 0 else 0
-    cright = close_c0 if close_w > 0 else b
-    if cleft > cright:  # 极端参数保护
-        cleft, cright = 0, b
-
-    regs: list[dict] = []
-    if ix > 0 and left_w > 0:
-        regs.append({"kind": "left", "axis": "v", "r0": 0, "r1": b,
-                     "c0": 0, "c1": left_w, "orient": "old_left"})
-    if iy > 0:
-        top_h = b - (ay - ys[iy - 1])
-        if top_h > 0 and cright > cleft:
-            regs.append({"kind": "top", "axis": "h", "r0": 0, "r1": top_h,
-                         "c0": cleft, "c1": cright, "orient": "old_top"})
-    if close_w > 0:
-        regs.append({"kind": "close_right", "axis": "v", "r0": 0, "r1": b,
-                     "c0": close_c0, "c1": b, "orient": "new_left"})
-    if periodic and iy == len(ys) - 1:
-        close_r0 = h - ay
-        close_h = b - close_r0
-        if close_h > 0 and cright > cleft:
-            regs.append({"kind": "close_bottom", "axis": "h",
-                         "r0": close_r0, "r1": b, "c0": cleft, "c1": cright,
-                         "orient": "new_top"})
-    return regs
-
-
-def region_coords(reg: dict, ax: int, ay: int, w: int, h: int,
-                  periodic: bool) -> tuple[np.ndarray, np.ndarray]:
-    rows = ay + np.arange(reg["r0"], reg["r1"])
-    cols = ax + np.arange(reg["c0"], reg["c1"])
-    if periodic:
-        rows = rows % h
-        cols = cols % w
-    return rows.astype(np.int64), cols.astype(np.int64)
+def _core_region(regs: list[dict]) -> dict | None:
+    """返回唯一属于“无条件写入”的核心矩形：既非左侧重叠，也非顶部重叠。"""
+    if not regs:
+        return None
+    r = regs[0]
+    c0, c1 = r["core_c"]
+    r0, r1 = r["core_r"]
+    if c1 <= c0 or r1 <= r0:
+        return None
+    return {"r0": r0, "r1": r1, "c0": c0, "c1": c1}
 
 
 class QuiltEngine:
-    def __init__(self, samples: list[Sample], cfg: QuiltConfig):
+    def __init__(self, samples: list[Sample], cfg: QuiltConfig, *,
+                 constraints=None, seed=None):
         self.samples = samples
         self.cfg = cfg
+        self.constraints = constraints
         self.b = cfg.patch
         self.w = cfg.out_w
         self.h = cfg.out_h
@@ -140,6 +104,7 @@ class QuiltEngine:
         self.map_sample = np.full((self.h, self.w), -1, np.int32)
         self.map_y = np.full((self.h, self.w), -1, np.int32)
         self.map_x = np.full((self.h, self.w), -1, np.int32)
+        self.filled = np.zeros((self.h, self.w), bool)
         self.placements: list[dict[str, Any]] = []
         self._root_rng = random.Random(cfg.seed)
         # 绝对 RMSE 阈值对高频白噪声纹理过严（其自然相邻差本身就 >0.17），
@@ -147,6 +112,54 @@ class QuiltEngine:
         self.nat_floor = min(_natural_adj_rmse(s.image) for s in samples)
         self.warn_line = max(cfg.seam_warn_rmse, 0.8 * self.nat_floor)
         self.fail_line = max(cfg.seam_fail_rmse, 1.5 * self.nat_floor)
+        self._locked = None
+        self._has_seed = False
+        self.constraint_events: list[dict] = []
+        self.seed_info: dict | None = None
+        self.seed_placements: list[dict] = []
+        if constraints is not None and constraints.locked:
+            from .constraints import locked_mask
+            self._locked = locked_mask(constraints.locked, self.h, self.w)
+        if seed is not None:
+            self._install_seed(seed)
+
+    def _lock_pixels(self, mask: np.ndarray) -> None:
+        if self._locked is None:
+            self._locked = mask.copy()
+        else:
+            self._locked |= mask
+
+    def _install_seed(self, seed) -> None:
+        """把已有合成结果（或框选样本区）铺为扩展起点；这些像素受保护。"""
+        for src, dst in ((seed["canvas"], self.canvas),
+                         (seed["own"], self.own),
+                         (seed["map_sample"], self.map_sample),
+                         (seed["map_y"], self.map_y),
+                         (seed["map_x"], self.map_x)):
+            dst[...] = src
+        self.filled[...] = seed.get("filled", self.own >= 0)
+        self._has_seed = True
+        self.seed_info = seed.get("info")
+        self.seed_placements = list(seed.get("placements", []))
+        protect = seed.get("protect")
+        if protect is None:
+            protect = self.filled
+        self._lock_pixels(protect)
+
+    def _tile_filled(self, ax: int, ay: int) -> bool:
+        """该图块整个 B×B 方块是否已被种子铺满，因而无需重解。"""
+        if not self._has_seed:
+            return False
+        r1 = min(self.h, ay + self.b)
+        c1 = min(self.w, ax + self.b)
+        return bool(self.filled[ay:r1, ax:c1].all())
+
+    def _record_seed_tile(self, ix: int, iy: int, ax: int, ay: int) -> None:
+        # 种子图块不计入新写入；单独记录以便追溯，不混入 placements。
+        self.seed_placements.append({
+            "ix": ix, "iy": iy, "anchor": [int(ax), int(ay)],
+            "patch_size": self.b, "decision": "seed-kept",
+            "reason": "扩展起点：该图块核心像素来自框选样本，保持不动"})
 
     # ---------- 候选代价 ----------
 
@@ -232,7 +245,18 @@ class QuiltEngine:
 
     # ---------- 切缝规划 ----------
 
-    def _plan(self, cand: dict, regs: list[dict]) -> dict:
+    def _strip_blocked(self, r: dict, hh: int, ww: int) -> np.ndarray:
+        """接缝禁区内、属于本条带的像素 → blocked（原始方向，未转置）。"""
+        if self.constraints is None or not self.constraints.forbidden:
+            return np.zeros((hh, ww), bool)
+        gy = self._ay + r["r0"] + np.arange(hh)
+        gx = self._ax + r["c0"] + np.arange(ww)
+        blocked = np.zeros((hh, ww), bool)
+        for fz in self.constraints.forbidden:
+            blocked |= fz.blocked_on(gy, gx, self.h, self.w, self.cfg.periodic)
+        return blocked
+
+    def _plan(self, cand: dict, regs: list[dict], ix: int, iy: int) -> dict:
         sid, sy, sx = cand["sample_id"], cand["source_y"], cand["source_x"]
         patch = self.samples[sid].image[sy:sy + self.b, sx:sx + self.b]
         region_plans = []
@@ -240,6 +264,7 @@ class QuiltEngine:
         worst = 0.0
         area_sum = 0
         mse_sum = 0.0
+        infeasible: list[str] = []
         for ri, r in enumerate(regs):
             ry = self._ay + np.arange(r["r0"], r["r1"])
             rx = self._ax + np.arange(r["c0"], r["c1"])
@@ -249,16 +274,46 @@ class QuiltEngine:
             old = self.canvas[np.ix_(ry, rx)]
             new = patch[r["r0"]:r["r1"], r["c0"]:r["c1"]]
             cost = ((new - old) ** 2).sum(axis=2)
+            hh, ww = cost.shape
             cost_for_path = cost if r["axis"] == "v" else cost.T
+            blocked = self._strip_blocked(r, hh, ww)
+            blocked_path = blocked if r["axis"] == "v" else blocked.T
+            pin = (self.constraints.pin_for(ix, iy, r["kind"])
+                   if self.constraints is not None else None)
+            no_solution = False
             if self.cfg.seam_mode == "mincut":
-                path, _ = min_cut_path(cost_for_path)
+                if blocked_path.any() or (pin and (pin.start is not None
+                                                   or pin.end is not None)):
+                    path, _ = min_cut_path_constrained(
+                        cost_for_path, blocked_path,
+                        pin.start if pin else None, pin.end if pin else None)
+                    if path is None:
+                        no_solution = True
+                else:
+                    path, _ = min_cut_path(cost_for_path)
             else:
                 path = straight_path(cost_for_path)
+            if no_solution:
+                # 禁区围死 / 端点不可达：本图块在该条带放弃写入，保留旧邻块
+                # 像素（覆盖仍完整）。不在此处静默改走直线切缝掩盖。
+                infeasible.append(r["kind"])
+                area = hh * ww
+                worst = max(worst, NO_SOLUTION_RMSE)
+                area_sum += area
+                mse_sum += NO_SOLUTION_RMSE ** 2 * area
+                masks[ri] = np.zeros((hh, ww), bool)
+                region_plans.append({"kind": r["kind"], "axis": r["axis"],
+                                     "orient": r["orient"],
+                                     "rmse": NO_SOLUTION_RMSE,
+                                     "straight_rmse": NO_SOLUTION_RMSE,
+                                     "path": [], "points_unwrapped": [],
+                                     "area": area, "no_solution": True,
+                                     "blocked_pixels": int(blocked.sum())})
+                continue
             raw_mean = path_energy(cost_for_path, path)
             straight = straight_path(cost_for_path)
             straight_rmse = float(np.sqrt(max(0.0, path_energy(cost_for_path, straight)) / 3.0))
             rmse = float(np.sqrt(max(0.0, raw_mean) / 3.0))
-            hh, ww = cost.shape
             if r["axis"] == "v":
                 q = np.arange(ww)
                 if r["orient"] == "old_left":
@@ -284,11 +339,14 @@ class QuiltEngine:
                                  "orient": r["orient"], "rmse": rmse,
                                  "straight_rmse": straight_rmse,
                                  "path": [int(v) for v in path],
-                                 "points_unwrapped": pts, "area": area})
+                                 "points_unwrapped": pts, "area": area,
+                                 "no_solution": False,
+                                 "blocked_pixels": int(blocked.sum())})
         mean_rmse = float(np.sqrt(mse_sum / max(1, area_sum)))
         return {"cand": cand, "patch": patch, "masks": masks,
                 "worst_rmse": worst, "mean_rmse": mean_rmse,
-                "regions": region_plans}
+                "regions": region_plans, "infeasible": infeasible,
+                "no_solution": bool(infeasible)}
 
     def _apply(self, tile_id: int, plan: dict, regs: list[dict]) -> None:
         # 非重叠区全部取新 patch；重叠区只取切缝判给新块的部分。
@@ -304,6 +362,9 @@ class QuiltEngine:
             gy_w, gx_w = gy % self.h, gx % self.w
         else:
             gy_w, gx_w = gy, gx
+        if self._locked is not None:
+            # 锁定细边永不改写：对应输出像素保持快照。
+            write = write & ~self._locked[gy_w, gx_w]
         sel = write
         yy, xx = gy_w[sel], gx_w[sel]
         self.canvas[yy, xx] = plan["patch"][sel]
@@ -311,6 +372,7 @@ class QuiltEngine:
         self.map_sample[yy, xx] = plan["cand"]["sample_id"]
         self.map_y[yy, xx] = syg[sel]
         self.map_x[yy, xx] = sxg[sel]
+        self.filled[yy, xx] = True
 
     # ---------- 主循环 ----------
 
@@ -320,6 +382,10 @@ class QuiltEngine:
         for iy, ay in enumerate(self.ys):
             for ix, ax in enumerate(self.xs):
                 self._ax, self._ay = ax, ay
+                # 扩展起点：已完全铺好的图块不必重解（其像素为受保护种子）。
+                if self._tile_filled(ax, ay):
+                    self._record_seed_tile(ix, iy, ax, ay)
+                    continue
                 child_seed = self._root_rng.getrandbits(63)
                 rng = random.Random(child_seed)
                 draw_log: list[dict] = []
@@ -349,14 +415,15 @@ class QuiltEngine:
                         return evaluated[k]
                     c = dict(c)
                     c["mse"] = float(maps[c["sample_id"]][c["source_y"], c["source_x"]])
-                    p = self._plan(c, regs)
+                    p = self._plan(c, regs, ix, iy)
                     rec = {"key": {"sample_id": c["sample_id"],
                                    "source_y": c["source_y"],
                                    "source_x": c["source_x"]},
                            "stage": stage, "mse": c["mse"],
                            "match_rmse": float(np.sqrt(max(0.0, c["mse"]))),
                            "seam_worst_rmse": p["worst_rmse"],
-                           "seam_mean_rmse": p["mean_rmse"]}
+                           "seam_mean_rmse": p["mean_rmse"],
+                           "constraint_infeasible": bool(p.get("no_solution"))}
                     evaluated[k] = {"rec": rec, "plan": p, "cand": c}
                     return evaluated[k]
 
@@ -428,6 +495,37 @@ class QuiltEngine:
 
                 final_plan = chosen_eval["plan"]
                 final_cand = chosen_eval["cand"]
+
+                # 约束无解：禁区围死端点时不能局部绕开，必须连同邻块重选；
+                # 候选池内都无解则显式报告（不静默改直线切缝掩盖）。
+                if final_plan.get("no_solution") and self.constraints is not None:
+                    self.constraint_events.append({
+                        "tile": tile_id, "ix": ix, "iy": iy,
+                        "infeasible_regions": list(final_plan.get("infeasible", [])),
+                        "stage": "initial"})
+                    resolved = None
+                    for c in top[:max(cfg.seam_k, 10)]:
+                        ev = evaluate(c, "constraint-reselect")
+                        if not ev["plan"].get("no_solution") and (
+                                resolved is None
+                                or ev["plan"]["worst_rmse"] < resolved["plan"]["worst_rmse"]):
+                            resolved = ev
+                    if resolved is not None:
+                        chosen_eval = resolved
+                        final_plan = resolved["plan"]
+                        final_cand = resolved["cand"]
+                        decision = "constraint-reroute"
+                        reason = ("禁区/端点约束使原接缝无解，连同候选来源重选为 "
+                                  + self._key_label(final_cand))
+                        self.constraint_events[-1]["resolved_by"] = (
+                            "reselect:" + self._key_label(final_cand))
+                    else:
+                        decision = "constraint-unresolved"
+                        reason = ("禁区围死接缝端点且候选池无解：保留邻块像素以维持"
+                                  "覆盖完整，该图块只写入非重叠核心区，已标记失败")
+                        flags.append("constraint-unresolved")
+                        self.constraint_events[-1]["resolved_by"] = "none"
+
                 if regs and final_plan["worst_rmse"] > self.fail_line:
                     flags.append("high-seam-error")
                 if gmin > cfg.match_fail_rmse ** 2 and regs:

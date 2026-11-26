@@ -136,7 +136,8 @@ def _status_and_warnings(cfg: QuiltConfig, metrics: dict, placements: list[dict]
 def execute(samples: list[Sample], cfg: QuiltConfig, run_id: str,
             title: str, group: str = "custom",
             out_root: Path | str = OUT_ROOT,
-            save_artifacts: bool = True) -> dict:
+            save_artifacts: bool = True,
+            extend_spec=None) -> dict:
     t_start = time.time()
     out_root = Path(out_root)
     run_dir = out_root / "runs" / run_id
@@ -144,14 +145,38 @@ def execute(samples: list[Sample], cfg: QuiltConfig, run_id: str,
 
     cfg, config_notes = normalize_config(cfg, samples)
 
-    engine = QuiltEngine(samples, cfg)
+    ext = None
+    if extend_spec is not None:
+        from .extend import build_constraints, build_seed, verify_extension, \
+            _resolve_borrow
+        seed_payload, seed_info = build_seed(samples, extend_spec, cfg)
+        cons, locking = build_constraints(samples, extend_spec, seed_info)
+        for le in locking:
+            r = le.rect
+            inside = seed_payload["protect"][max(0, r.y0):r.y1,
+                                             max(0, r.x0):r.x1]
+            if inside.size == 0 or not inside.all():
+                raise ValueError("锁定细边必须完全位于框选样本区域内")
+            le.snapshot(seed_payload["canvas"])
+        pin_notes = (_resolve_borrow(cons, locking[0], cfg)
+                     if extend_spec.borrow_endpoint and locking else [])
+        engine = QuiltEngine(samples, cfg, constraints=cons, seed=seed_payload)
+        ext = {"spec": extend_spec, "seed_payload": seed_payload,
+               "seed_info": seed_info, "locking": locking,
+               "cons": cons, "pin_notes": pin_notes}
+    else:
+        engine = QuiltEngine(samples, cfg)
     res = engine.run()
     canvas, own = res["canvas"], res["own"]
 
     # 同种子、同候选序列的硬切基线（仅切缝方式不同）
     straight_cfg = QuiltConfig(**{**asdict(cfg), "policy": "off",
                                   "seam_mode": "straight"})
-    straight_res = QuiltEngine(samples, straight_cfg).run()
+    if ext is not None:
+        straight_res = QuiltEngine(
+            samples, straight_cfg, seed=ext["seed_payload"]).run()
+    else:
+        straight_res = QuiltEngine(samples, straight_cfg).run()
 
     # 几何显示信息
     for p in res["placements"]:
@@ -206,6 +231,45 @@ def execute(samples: list[Sample], cfg: QuiltConfig, run_id: str,
     status, warnings, infos = _status_and_warnings(
         cfg, metrics, res["placements"], sample_struct)
 
+    extension_report = None
+    if ext is not None:
+        from .extend import verify_extension, _dirty_tile_map
+        extension_report = verify_extension(
+            res, samples, ext["seed_payload"], ext["locking"], cfg, ext["spec"])
+        extension_report["engine"] = {
+            "constraint_events": engine.constraint_events,
+            "seed_placements": engine.seed_placements,
+            "pin_notes": ext["pin_notes"],
+            "dirty_tiles": _dirty_tile_map(ext["cons"], res, ext["spec"], cfg),
+        }
+        extension_report["seed_info"] = ext["seed_info"]
+        # 扩展自检直接并入状态判定：覆盖不完整或受保护区域被改即失败。
+        cov = extension_report["coverage"]
+        prot = extension_report["protected"]
+        locked_ok = all(le["identical"] for le in extension_report["locked_edges"])
+        prov = extension_report["provenance"]
+        if not cov["complete"]:
+            warnings.append(f"扩展覆盖不完整：{cov['hole_pixels']} 像素未填充。")
+            status = "failed-likely"
+        if not prot["identical"]:
+            warnings.append(
+                f"受保护种子被改写 {prot['changed_pixels']} 像素，扩展破坏框选内容。")
+            status = "failed-likely"
+        if not locked_ok:
+            warnings.append("锁定细边在扩展前后不一致：受保护像素被改写。")
+            status = "failed-likely"
+        if not prov["exact"]:
+            warnings.append(
+                f"{prov['mismatch_pixels']} 个像素与其来源样本坐标不符："
+                "修补可能改动了像素而非仅改接缝路径。")
+            status = "failed-likely"
+        unresolved = [e for e in engine.constraint_events
+                      if e.get("resolved_by") == "none"]
+        if unresolved:
+            infos.append(
+                f"{len(unresolved)} 个图块因禁区围死端点且候选池无解，"
+                "已保留邻块像素维持覆盖完整（局部绕不开，需放宽禁区）。")
+
     # 渲染
     seams_img = viz.render_seams_overlay(canvas, res["placements"], cfg.periodic)
     prov_id = viz.render_provenance_id(res["map_sample"], len(samples), own)
@@ -253,6 +317,24 @@ def execute(samples: list[Sample], cfg: QuiltConfig, run_id: str,
                             y=res["map_y"], x=res["map_x"])
         files["source_map_npz"] = f"output/runs/{run_id}/source_map.npz"
 
+        if extension_report is not None:
+            ext_img = viz.render_extension_overlay(
+                canvas, ext["seed_payload"]["protect"], own, res["placements"],
+                ext["spec"], cfg.periodic)
+            save_png(ext_img, run_dir / "extension.png")
+            files["extension"] = f"output/runs/{run_id}/extension.png"
+            holds = extension_report["coverage"]["hole_pixels"]
+            if holds == 0:
+                # 保存自检数据的可复跑快照（非图片）
+                np.savez_compressed(
+                    run_dir / "extension_check.npz",
+                    seed_pixels=ext["seed_payload"]["protect"],
+                    locked_ok=np.array(
+                        [le["identical"] for le in extension_report["locked_edges"]],
+                        bool))
+                files["extension_check_npz"] = (
+                    f"output/runs/{run_id}/extension_check.npz")
+
     metrics["elapsed_sec"] = round(time.time() - t_start, 2)
 
     run_json = {
@@ -270,6 +352,20 @@ def execute(samples: list[Sample], cfg: QuiltConfig, run_id: str,
             res["placements"], cfg.out_w, cfg.out_h, cfg.periodic),
         "files": files,
     }
+    if extension_report is not None:
+        run_json["extension"] = extension_report
+        run_json["metrics"]["extension"] = {
+            "coverage_complete": extension_report["coverage"]["complete"],
+            "hole_pixels": extension_report["coverage"]["hole_pixels"],
+            "protected_identical": extension_report["protected"]["identical"],
+            "locked_edges_identical": all(
+                le["identical"] for le in extension_report["locked_edges"]),
+            "provenance_exact": extension_report["provenance"]["exact"],
+            "seam_to_natural": extension_report["seam"]["seam_to_natural"],
+            "constraint_unresolved": sum(
+                1 for e in engine.constraint_events
+                if e.get("resolved_by") == "none"),
+        }
     if save_artifacts:
         with open(run_dir / "run.json", "w", encoding="utf-8") as f:
             json.dump(run_json, f, ensure_ascii=False, default=_json_safe)

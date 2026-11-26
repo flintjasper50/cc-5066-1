@@ -1,0 +1,4731 @@
+{
+ "version": 1,
+ "generated_at": "2026-11-26T10:54:10+00:00",
+ "runs": [
+  {
+   "run_id": "markers_stress_per_s910",
+   "title": "压力测试 · 周期闭环 + 小 patch · seed 910",
+   "group": "stress",
+   "created_at": "2026-11-26T10:51:52+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 44,
+    "overlap": 15,
+    "seed": 910,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "failed-likely",
+   "warnings": [
+    "6/169 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "1/169 个图块的规划切缝 RMSE 超过失败线 0.17（已在图上红框标出）。",
+    "13/169 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "但同种子硬切基线仅切断 30 次，本次最小割在语义锚点上反而更差；20 段长接缝从独特标记/锚点笔画内部穿过（共 33 次锚点切割，20 次严重）：强语义结构超出 image quilting 可重排范围，标记被切碎/错位，这类损坏无法只看颜色 RMSE。"
+   ],
+   "infos": [
+    "实际接缝 RMSE=0.125 为自然相邻差 0.106 的 1.17 倍，近距离仍可能看到切痕。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.10640517312131392,
+     "seam_warn_line": 0.08512413849705114,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.12469363258051723,
+     "seam_pair_count": 15435,
+     "closure_seam_rmse": 0.14640248972063138,
+     "closure_pair_count": 109
+    },
+    "straight_seam": {
+     "seam_rmse": 0.12235357612482785,
+     "seam_pair_count": 11167,
+     "closure_seam_rmse": 0.1187106053740953,
+     "closure_pair_count": 91
+    },
+    "seam_improvement_vs_straight_pct": -1.9125362165973836,
+    "periodic": {
+     "edge_lr_rmse": 0.12964634597301483,
+     "edge_tb_rmse": 0.09111873060464859,
+     "edge_rmse": 0.11205087704064878
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.1031777635216713,
+     "edge_tb_rmse": 0.07228584587574005,
+     "edge_rmse": 0.0890811270677049
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1292880790000416
+    },
+    "repetition": {
+     "distinct_source_tiles": 167,
+     "placements": 169,
+     "max_exact_reuse": 2,
+     "high_source_overlap_pairs": 353,
+     "max_source_iou": 1.0
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.3163928687572479,
+     "autocorr_lag": [
+      14,
+      0
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.21814119815826416
+    },
+    "orientation": {
+     "orientation_coherence": 0.3856267035007477,
+     "orientation_deg": -1.8209402561187744
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 15435,
+     "anchor_inside_hits": 3115,
+     "anchor_edge_hits": 1656,
+     "anchor_hit_total": 4771,
+     "anchor_hit_fraction": 0.30910268869452545,
+     "anchor_seam_density": 0.08516382643253634,
+     "anchor_output_pixels": 46299,
+     "anchor_cut_events": 33,
+     "anchor_severe_events": 20,
+     "cut_events_per_100kpx": 22.379557291666664,
+     "severe_events_per_100kpx": 13.563368055555555,
+     "anchor_event_areas": [
+      823,
+      428,
+      287,
+      251,
+      248,
+      248,
+      242,
+      229,
+      206,
+      188,
+      184,
+      170,
+      167,
+      151,
+      149,
+      121,
+      121,
+      88,
+      66,
+      64,
+      38,
+      37,
+      36,
+      35,
+      35,
+      34,
+      31,
+      26,
+      26,
+      22,
+      21,
+      21,
+      19,
+      11,
+      9,
+      6,
+      5,
+      4,
+      4,
+      3,
+      2,
+      2,
+      2,
+      2,
+      2
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 11167,
+     "anchor_inside_hits": 2718,
+     "anchor_edge_hits": 981,
+     "anchor_hit_total": 3699,
+     "anchor_hit_fraction": 0.3312438434673592,
+     "anchor_seam_density": 0.07376370784192013,
+     "anchor_output_pixels": 43497,
+     "anchor_cut_events": 30,
+     "anchor_severe_events": 21,
+     "cut_events_per_100kpx": 20.345052083333332,
+     "severe_events_per_100kpx": 14.241536458333332,
+     "anchor_event_areas": [
+      1024,
+      518,
+      405,
+      356,
+      342,
+      328,
+      303,
+      226,
+      208,
+      202,
+      202,
+      174,
+      134,
+      128,
+      118,
+      80,
+      55,
+      48,
+      48,
+      47,
+      45,
+      34,
+      32,
+      28,
+      26,
+      24,
+      24,
+      16,
+      12,
+      12,
+      9,
+      8,
+      4
+     ]
+    },
+    "samples": [
+     {
+      "id": "markers",
+      "name": "独特标记样本",
+      "natural_adj_rmse": 0.10640517312131392,
+      "orientation_coherence": 0.3238200843334198,
+      "orientation_deg": -8.66927433013916
+     }
+    ],
+    "elapsed_sec": 2.22,
+    "seam_to_natural_ratio": 1.1718756609544951,
+    "interventions": {
+     "reroute": 9,
+     "resample": 2,
+     "unresolved": 6
+    }
+   },
+   "anchors_x": [
+    0,
+    30,
+    59,
+    89,
+    118,
+    148,
+    177,
+    207,
+    236,
+    266,
+    295,
+    325,
+    354
+   ],
+   "anchors_y": [
+    0,
+    30,
+    59,
+    89,
+    118,
+    148,
+    177,
+    207,
+    236,
+    266,
+    295,
+    325,
+    354
+   ],
+   "n_placements": 169,
+   "samples": [
+    {
+     "id": "markers",
+     "name": "独特标记样本",
+     "role": "明显独特标记：每个大标记全局唯一，强结构下 quilting 可能失败",
+     "meta": {
+      "seed": 7303,
+      "kind": "markers",
+      "markers": 9
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/markers_stress_per_s910/result.png",
+    "seams": "output/runs/markers_stress_per_s910/seams.png",
+    "provenance_id": "output/runs/markers_stress_per_s910/provenance_id.png",
+    "provenance_xy": "output/runs/markers_stress_per_s910/provenance_xy.png",
+    "tile_grid": "output/runs/markers_stress_per_s910/tile_grid.png",
+    "straight": "output/runs/markers_stress_per_s910/straight.png",
+    "naive_tile": "output/runs/markers_stress_per_s910/naive_tile.png",
+    "tileid": "output/runs/markers_stress_per_s910/tileid.png",
+    "patch_wall": "output/runs/markers_stress_per_s910/patch_wall.png",
+    "tile2x2": "output/runs/markers_stress_per_s910/tile2x2.png",
+    "comparison": "output/runs/markers_stress_per_s910/comparison.png",
+    "sample_0": "output/runs/markers_stress_per_s910/sample_0.png",
+    "source_map_npz": "output/runs/markers_stress_per_s910/source_map.npz"
+   }
+  },
+  {
+   "run_id": "markers_stress_s909",
+   "title": "压力测试 · patch 小于标记尺度 · seed 909",
+   "group": "stress",
+   "created_at": "2026-11-26T10:51:49+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 40,
+    "overlap": 14,
+    "seed": 909,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.16,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "failed-likely",
+   "warnings": [
+    "6/196 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "2/196 个图块的规划切缝 RMSE 超过失败线 0.16（已在图上红框标出）。",
+    "12/196 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "同种子硬切基线会切断 42 次锚点，最小割减少 3 次；28 段长接缝从独特标记/锚点笔画内部穿过（共 39 次锚点切割，28 次严重）：强语义结构超出 image quilting 可重排范围，标记被切碎/错位，这类损坏无法只看颜色 RMSE。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.10640517312131392,
+     "seam_warn_line": 0.08512413849705114,
+     "seam_fail_line": 0.16,
+     "config_warn": 0.085,
+     "config_fail": 0.16
+    },
+    "seam": {
+     "seam_rmse": 0.1145842746632039,
+     "seam_pair_count": 14744
+    },
+    "straight_seam": {
+     "seam_rmse": 0.1296967411410973,
+     "seam_pair_count": 11089
+    },
+    "seam_improvement_vs_straight_pct": 11.652155902246252,
+    "periodic": {
+     "edge_lr_rmse": 0.1863652765750885,
+     "edge_tb_rmse": 0.15675154328346252,
+     "edge_rmse": 0.17219620006645975
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.24615047872066498,
+     "edge_tb_rmse": 0.1779509335756302,
+     "edge_rmse": 0.21477499032109265
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1292880790000416
+    },
+    "repetition": {
+     "distinct_source_tiles": 194,
+     "placements": 196,
+     "max_exact_reuse": 2,
+     "high_source_overlap_pairs": 443,
+     "max_source_iou": 1.0
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.17632578313350677,
+     "autocorr_lag": [
+      1,
+      13
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.19698236882686615
+    },
+    "orientation": {
+     "orientation_coherence": 0.3833911716938019,
+     "orientation_deg": -7.001583576202393
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 14744,
+     "anchor_inside_hits": 2903,
+     "anchor_edge_hits": 1308,
+     "anchor_hit_total": 4211,
+     "anchor_hit_fraction": 0.28560770482908304,
+     "anchor_seam_density": 0.08938758073027919,
+     "anchor_output_pixels": 39793,
+     "anchor_cut_events": 39,
+     "anchor_severe_events": 28,
+     "cut_events_per_100kpx": 26.448567708333332,
+     "severe_events_per_100kpx": 18.988715277777775,
+     "anchor_event_areas": [
+      412,
+      360,
+      310,
+      282,
+      280,
+      270,
+      235,
+      226,
+      215,
+      201,
+      184,
+      130,
+      128,
+      126,
+      123,
+      119,
+      116,
+      111,
+      94,
+      76,
+      67,
+      58,
+      56,
+      53,
+      50,
+      50,
+      40,
+      40,
+      38,
+      37,
+      36,
+      34,
+      34,
+      22,
+      20,
+      20,
+      14,
+      14,
+      12,
+      6,
+      6,
+      6,
+      4,
+      2,
+      2
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 11089,
+     "anchor_inside_hits": 2008,
+     "anchor_edge_hits": 962,
+     "anchor_hit_total": 2970,
+     "anchor_hit_fraction": 0.26783298764541436,
+     "anchor_seam_density": 0.06966914851928567,
+     "anchor_output_pixels": 35726,
+     "anchor_cut_events": 42,
+     "anchor_severe_events": 27,
+     "cut_events_per_100kpx": 28.483072916666664,
+     "severe_events_per_100kpx": 18.310546875,
+     "anchor_event_areas": [
+      355,
+      278,
+      264,
+      255,
+      254,
+      224,
+      222,
+      137,
+      128,
+      109,
+      106,
+      102,
+      102,
+      102,
+      96,
+      92,
+      72,
+      68,
+      58,
+      54,
+      54,
+      52,
+      51,
+      50,
+      46,
+      44,
+      42,
+      38,
+      38,
+      36,
+      36,
+      32,
+      32,
+      32,
+      30,
+      30,
+      28,
+      26,
+      26,
+      18,
+      14,
+      12,
+      11,
+      6,
+      3,
+      2,
+      2
+     ]
+    },
+    "samples": [
+     {
+      "id": "markers",
+      "name": "独特标记样本",
+      "natural_adj_rmse": 0.10640517312131392,
+      "orientation_coherence": 0.3238200843334198,
+      "orientation_deg": -8.66927433013916
+     }
+    ],
+    "elapsed_sec": 2.07,
+    "seam_to_natural_ratio": 1.0768675178279619,
+    "interventions": {
+     "reroute": 7,
+     "resample": 2,
+     "unresolved": 6
+    }
+   },
+   "anchors_x": [
+    0,
+    26,
+    53,
+    79,
+    106,
+    132,
+    159,
+    185,
+    212,
+    238,
+    265,
+    291,
+    318,
+    344
+   ],
+   "anchors_y": [
+    0,
+    26,
+    53,
+    79,
+    106,
+    132,
+    159,
+    185,
+    212,
+    238,
+    265,
+    291,
+    318,
+    344
+   ],
+   "n_placements": 196,
+   "samples": [
+    {
+     "id": "markers",
+     "name": "独特标记样本",
+     "role": "明显独特标记：每个大标记全局唯一，强结构下 quilting 可能失败",
+     "meta": {
+      "seed": 7303,
+      "kind": "markers",
+      "markers": 9
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/markers_stress_s909/result.png",
+    "seams": "output/runs/markers_stress_s909/seams.png",
+    "provenance_id": "output/runs/markers_stress_s909/provenance_id.png",
+    "provenance_xy": "output/runs/markers_stress_s909/provenance_xy.png",
+    "tile_grid": "output/runs/markers_stress_s909/tile_grid.png",
+    "straight": "output/runs/markers_stress_s909/straight.png",
+    "naive_tile": "output/runs/markers_stress_s909/naive_tile.png",
+    "tileid": "output/runs/markers_stress_s909/tileid.png",
+    "patch_wall": "output/runs/markers_stress_s909/patch_wall.png",
+    "comparison": "output/runs/markers_stress_s909/comparison.png",
+    "sample_0": "output/runs/markers_stress_s909/sample_0.png",
+    "source_map_npz": "output/runs/markers_stress_s909/source_map.npz"
+   }
+  },
+  {
+   "run_id": "conflict_resample_s606",
+   "title": "互斥锚点 A/B · 仅来源重采样 · seed 606",
+   "group": "conflict",
+   "created_at": "2026-11-26T10:51:47+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 606,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "resample",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "warning",
+   "warnings": [
+    "2/100 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "1/100 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "同种子硬切基线会切断 10 次锚点，最小割减少 3 次；7 次接缝切到真值锚点（3 次严重）：部分独特标记/方向箭头可能被切边或错位。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.08621834457874529,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.09541652788576786,
+     "seam_pair_count": 12659,
+     "closure_seam_rmse": 0.09683627507424612,
+     "closure_pair_count": 207
+    },
+    "straight_seam": {
+     "seam_rmse": 0.11467900827168855,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.06266223197152718,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 16.796866903736664,
+    "periodic": {
+     "edge_lr_rmse": 0.09064007550477982,
+     "edge_tb_rmse": 0.10619419813156128,
+     "edge_rmse": 0.09872393581173078
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.07991641759872437,
+     "edge_tb_rmse": 0.08047837764024734,
+     "edge_rmse": 0.08019788983950876
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1420443280974912
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 83,
+     "max_source_iou": 0.883651414118188
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.42392224073410034,
+     "autocorr_lag": [
+      48,
+      1
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0016666666666666668,
+     "dup_pair_rmse_median": 0.19948026537895203
+    },
+    "orientation": {
+     "orientation_coherence": 0.8983323574066162,
+     "orientation_deg": 34.00044250488281
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 12659,
+     "anchor_inside_hits": 131,
+     "anchor_edge_hits": 30,
+     "anchor_hit_total": 161,
+     "anchor_hit_fraction": 0.012718224188324512,
+     "anchor_seam_density": 0.03514684641309581,
+     "anchor_output_pixels": 4154,
+     "anchor_cut_events": 7,
+     "anchor_severe_events": 3,
+     "cut_events_per_100kpx": 4.747178819444444,
+     "severe_events_per_100kpx": 2.034505208333333,
+     "anchor_event_areas": [
+      68,
+      47,
+      42,
+      26,
+      26,
+      20,
+      18,
+      10
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 8940,
+     "anchor_inside_hits": 167,
+     "anchor_edge_hits": 35,
+     "anchor_hit_total": 202,
+     "anchor_hit_fraction": 0.022595078299776285,
+     "anchor_seam_density": 0.05006784260515604,
+     "anchor_output_pixels": 3685,
+     "anchor_cut_events": 10,
+     "anchor_severe_events": 2,
+     "cut_events_per_100kpx": 6.781684027777778,
+     "severe_events_per_100kpx": 1.3563368055555556,
+     "anchor_event_areas": [
+      71,
+      50,
+      34,
+      30,
+      28,
+      28,
+      18,
+      17,
+      15,
+      14,
+      10,
+      10
+     ]
+    },
+    "samples": [
+     {
+      "id": "conflict_a",
+      "name": "互斥锚点 A（右向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9224925637245178,
+      "orientation_deg": 34.38481140136719
+     },
+     {
+      "id": "conflict_b",
+      "name": "互斥锚点 B（左向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9223668575286865,
+      "orientation_deg": 34.383094787597656
+     }
+    ],
+    "elapsed_sec": 2.38,
+    "seam_to_natural_ratio": 1.1066847589334268,
+    "interventions": {
+     "reroute": 0,
+     "resample": 7,
+     "unresolved": 2
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "conflict_a",
+     "name": "互斥锚点 A（右向箭头）",
+     "role": "与 B 条纹方向完全一致，但局部箭头朝右，和 B 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "right"
+     }
+    },
+    {
+     "id": "conflict_b",
+     "name": "互斥锚点 B（左向箭头）",
+     "role": "与 A 条纹方向完全一致，但局部箭头朝左，和 A 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "left"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/conflict_resample_s606/result.png",
+    "seams": "output/runs/conflict_resample_s606/seams.png",
+    "provenance_id": "output/runs/conflict_resample_s606/provenance_id.png",
+    "provenance_xy": "output/runs/conflict_resample_s606/provenance_xy.png",
+    "tile_grid": "output/runs/conflict_resample_s606/tile_grid.png",
+    "straight": "output/runs/conflict_resample_s606/straight.png",
+    "naive_tile": "output/runs/conflict_resample_s606/naive_tile.png",
+    "tileid": "output/runs/conflict_resample_s606/tileid.png",
+    "patch_wall": "output/runs/conflict_resample_s606/patch_wall.png",
+    "tile2x2": "output/runs/conflict_resample_s606/tile2x2.png",
+    "comparison": "output/runs/conflict_resample_s606/comparison.png",
+    "sample_0": "output/runs/conflict_resample_s606/sample_0.png",
+    "sample_1": "output/runs/conflict_resample_s606/sample_1.png",
+    "source_map_npz": "output/runs/conflict_resample_s606/source_map.npz"
+   }
+  },
+  {
+   "run_id": "conflict_reroute_s606",
+   "title": "互斥锚点 A/B · 仅切缝重排 · seed 606",
+   "group": "conflict",
+   "created_at": "2026-11-26T10:51:45+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 606,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "reroute",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "warning",
+   "warnings": [
+    "同种子硬切基线会切断 10 次锚点，最小割减少 2 次；8 次接缝切到真值锚点（2 次严重）：部分独特标记/方向箭头可能被切边或错位。"
+   ],
+   "infos": [
+    "1/100 个位置最佳重叠 RMSE 偏高；对高频随机纹理这是正常现象，最小割已把实际接缝压到自然噪声水平。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.08621834457874529,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.09830328387775883,
+     "seam_pair_count": 12777,
+     "closure_seam_rmse": 0.12479931524012959,
+     "closure_pair_count": 169
+    },
+    "straight_seam": {
+     "seam_rmse": 0.11467900827168855,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.06266223197152718,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 14.27961807546646,
+    "periodic": {
+     "edge_lr_rmse": 0.10836241394281387,
+     "edge_tb_rmse": 0.10766396671533585,
+     "edge_rmse": 0.1080137548750035
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.07991641759872437,
+     "edge_tb_rmse": 0.08047837764024734,
+     "edge_rmse": 0.08019788983950876
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1420443280974912
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 77,
+     "max_source_iou": 0.883651414118188
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.41154494881629944,
+     "autocorr_lag": [
+      41,
+      11
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0016666666666666668,
+     "dup_pair_rmse_median": 0.19969269633293152
+    },
+    "orientation": {
+     "orientation_coherence": 0.8953427076339722,
+     "orientation_deg": 34.069671630859375
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 12777,
+     "anchor_inside_hits": 163,
+     "anchor_edge_hits": 38,
+     "anchor_hit_total": 201,
+     "anchor_hit_fraction": 0.01573139234562104,
+     "anchor_seam_density": 0.04404646660212972,
+     "anchor_output_pixels": 4132,
+     "anchor_cut_events": 8,
+     "anchor_severe_events": 2,
+     "cut_events_per_100kpx": 5.425347222222222,
+     "severe_events_per_100kpx": 1.3563368055555556,
+     "anchor_event_areas": [
+      68,
+      42,
+      30,
+      26,
+      26,
+      26,
+      18,
+      17,
+      10
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 8940,
+     "anchor_inside_hits": 167,
+     "anchor_edge_hits": 35,
+     "anchor_hit_total": 202,
+     "anchor_hit_fraction": 0.022595078299776285,
+     "anchor_seam_density": 0.05006784260515604,
+     "anchor_output_pixels": 3685,
+     "anchor_cut_events": 10,
+     "anchor_severe_events": 2,
+     "cut_events_per_100kpx": 6.781684027777778,
+     "severe_events_per_100kpx": 1.3563368055555556,
+     "anchor_event_areas": [
+      71,
+      50,
+      34,
+      30,
+      28,
+      28,
+      18,
+      17,
+      15,
+      14,
+      10,
+      10
+     ]
+    },
+    "samples": [
+     {
+      "id": "conflict_a",
+      "name": "互斥锚点 A（右向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9224925637245178,
+      "orientation_deg": 34.38481140136719
+     },
+     {
+      "id": "conflict_b",
+      "name": "互斥锚点 B（左向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9223668575286865,
+      "orientation_deg": 34.383094787597656
+     }
+    ],
+    "elapsed_sec": 2.25,
+    "seam_to_natural_ratio": 1.1401666821377678,
+    "interventions": {
+     "reroute": 9,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "conflict_a",
+     "name": "互斥锚点 A（右向箭头）",
+     "role": "与 B 条纹方向完全一致，但局部箭头朝右，和 B 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "right"
+     }
+    },
+    {
+     "id": "conflict_b",
+     "name": "互斥锚点 B（左向箭头）",
+     "role": "与 A 条纹方向完全一致，但局部箭头朝左，和 A 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "left"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/conflict_reroute_s606/result.png",
+    "seams": "output/runs/conflict_reroute_s606/seams.png",
+    "provenance_id": "output/runs/conflict_reroute_s606/provenance_id.png",
+    "provenance_xy": "output/runs/conflict_reroute_s606/provenance_xy.png",
+    "tile_grid": "output/runs/conflict_reroute_s606/tile_grid.png",
+    "straight": "output/runs/conflict_reroute_s606/straight.png",
+    "naive_tile": "output/runs/conflict_reroute_s606/naive_tile.png",
+    "tileid": "output/runs/conflict_reroute_s606/tileid.png",
+    "patch_wall": "output/runs/conflict_reroute_s606/patch_wall.png",
+    "tile2x2": "output/runs/conflict_reroute_s606/tile2x2.png",
+    "comparison": "output/runs/conflict_reroute_s606/comparison.png",
+    "sample_0": "output/runs/conflict_reroute_s606/sample_0.png",
+    "sample_1": "output/runs/conflict_reroute_s606/sample_1.png",
+    "source_map_npz": "output/runs/conflict_reroute_s606/source_map.npz"
+   }
+  },
+  {
+   "run_id": "conflict_adapt_s808",
+   "title": "互斥锚点 A/B · 自适应(重排+重采样) · seed 808",
+   "group": "conflict",
+   "created_at": "2026-11-26T10:51:42+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 808,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "warning",
+   "warnings": [
+    "7/100 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "3/100 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "同种子硬切基线会切断 11 次锚点，最小割减少 6 次；5 次接缝切到真值锚点（3 次严重）：部分独特标记/方向箭头可能被切边或错位。"
+   ],
+   "infos": [
+    "实际接缝 RMSE=0.100 为自然相邻差 0.086 的 1.15 倍，近距离仍可能看到切痕。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.08621834457874529,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.09956060650389265,
+     "seam_pair_count": 12773,
+     "closure_seam_rmse": 0.10566855633552252,
+     "closure_pair_count": 157
+    },
+    "straight_seam": {
+     "seam_rmse": 0.12768106018224204,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.12850177249939007,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 22.023981973686965,
+    "periodic": {
+     "edge_lr_rmse": 0.08828465640544891,
+     "edge_tb_rmse": 0.08382967114448547,
+     "edge_rmse": 0.08608598701536956
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.09672064334154129,
+     "edge_tb_rmse": 0.06824018806219101,
+     "edge_rmse": 0.08370067537112479
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1420443280974912
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 104,
+     "max_source_iou": 0.9692307692307692
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.3416007459163666,
+     "autocorr_lag": [
+      37,
+      17
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.002,
+     "dup_pair_rmse_median": 0.19898539781570435
+    },
+    "orientation": {
+     "orientation_coherence": 0.8847059011459351,
+     "orientation_deg": 34.58840560913086
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 12773,
+     "anchor_inside_hits": 155,
+     "anchor_edge_hits": 35,
+     "anchor_hit_total": 190,
+     "anchor_hit_fraction": 0.014875127221482815,
+     "anchor_seam_density": 0.0453231739358907,
+     "anchor_output_pixels": 3806,
+     "anchor_cut_events": 5,
+     "anchor_severe_events": 3,
+     "cut_events_per_100kpx": 3.390842013888889,
+     "severe_events_per_100kpx": 2.034505208333333,
+     "anchor_event_areas": [
+      60,
+      44,
+      40,
+      37,
+      28,
+      11,
+      11,
+      10,
+      10,
+      4
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 8940,
+     "anchor_inside_hits": 287,
+     "anchor_edge_hits": 27,
+     "anchor_hit_total": 314,
+     "anchor_hit_fraction": 0.03512304250559284,
+     "anchor_seam_density": 0.07249698431845597,
+     "anchor_output_pixels": 4145,
+     "anchor_cut_events": 11,
+     "anchor_severe_events": 7,
+     "cut_events_per_100kpx": 7.459852430555555,
+     "severe_events_per_100kpx": 4.747178819444444,
+     "anchor_event_areas": [
+      97,
+      74,
+      63,
+      55,
+      52,
+      50,
+      44,
+      35,
+      29,
+      23,
+      16,
+      9,
+      5
+     ]
+    },
+    "samples": [
+     {
+      "id": "conflict_a",
+      "name": "互斥锚点 A（右向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9224925637245178,
+      "orientation_deg": 34.38481140136719
+     },
+     {
+      "id": "conflict_b",
+      "name": "互斥锚点 B（左向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9223668575286865,
+      "orientation_deg": 34.383094787597656
+     }
+    ],
+    "elapsed_sec": 2.47,
+    "seam_to_natural_ratio": 1.1547496880198338,
+    "interventions": {
+     "reroute": 3,
+     "resample": 7,
+     "unresolved": 7
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "conflict_a",
+     "name": "互斥锚点 A（右向箭头）",
+     "role": "与 B 条纹方向完全一致，但局部箭头朝右，和 B 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "right"
+     }
+    },
+    {
+     "id": "conflict_b",
+     "name": "互斥锚点 B（左向箭头）",
+     "role": "与 A 条纹方向完全一致，但局部箭头朝左，和 A 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "left"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/conflict_adapt_s808/result.png",
+    "seams": "output/runs/conflict_adapt_s808/seams.png",
+    "provenance_id": "output/runs/conflict_adapt_s808/provenance_id.png",
+    "provenance_xy": "output/runs/conflict_adapt_s808/provenance_xy.png",
+    "tile_grid": "output/runs/conflict_adapt_s808/tile_grid.png",
+    "straight": "output/runs/conflict_adapt_s808/straight.png",
+    "naive_tile": "output/runs/conflict_adapt_s808/naive_tile.png",
+    "tileid": "output/runs/conflict_adapt_s808/tileid.png",
+    "patch_wall": "output/runs/conflict_adapt_s808/patch_wall.png",
+    "tile2x2": "output/runs/conflict_adapt_s808/tile2x2.png",
+    "comparison": "output/runs/conflict_adapt_s808/comparison.png",
+    "sample_0": "output/runs/conflict_adapt_s808/sample_0.png",
+    "sample_1": "output/runs/conflict_adapt_s808/sample_1.png",
+    "source_map_npz": "output/runs/conflict_adapt_s808/source_map.npz"
+   }
+  },
+  {
+   "run_id": "conflict_adapt_s707",
+   "title": "互斥锚点 A/B · 自适应(重排+重采样) · seed 707",
+   "group": "conflict",
+   "created_at": "2026-11-26T10:51:40+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 707,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "warning",
+   "warnings": [
+    "6/100 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "2/100 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "但同种子硬切基线仅切断 9 次，本次最小割在语义锚点上反而更差；12 次接缝切到真值锚点（5 次严重）：部分独特标记/方向箭头可能被切边或错位。"
+   ],
+   "infos": [
+    "实际接缝 RMSE=0.100 为自然相邻差 0.086 的 1.16 倍，近距离仍可能看到切痕。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.08621834457874529,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.10034504016494931,
+     "seam_pair_count": 12691,
+     "closure_seam_rmse": 0.1298795535262855,
+     "closure_pair_count": 184
+    },
+    "straight_seam": {
+     "seam_rmse": 0.12383921689916502,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.17162284317572105,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 18.971515907877254,
+    "periodic": {
+     "edge_lr_rmse": 0.09380045533180237,
+     "edge_tb_rmse": 0.08900060504674911,
+     "edge_rmse": 0.09143203245892786
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.13577856123447418,
+     "edge_tb_rmse": 0.09202851355075836,
+     "edge_rmse": 0.11598505291042026
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1420443280974912
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 106,
+     "max_source_iou": 0.9113392440503967
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.38549625873565674,
+     "autocorr_lag": [
+      42,
+      9
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0006666666666666666,
+     "dup_pair_rmse_median": 0.20391377806663513
+    },
+    "orientation": {
+     "orientation_coherence": 0.8928442001342773,
+     "orientation_deg": 33.569583892822266
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 12691,
+     "anchor_inside_hits": 316,
+     "anchor_edge_hits": 61,
+     "anchor_hit_total": 377,
+     "anchor_hit_fraction": 0.029706090930580728,
+     "anchor_seam_density": 0.07612038664323374,
+     "anchor_output_pixels": 4552,
+     "anchor_cut_events": 12,
+     "anchor_severe_events": 5,
+     "cut_events_per_100kpx": 8.138020833333332,
+     "severe_events_per_100kpx": 3.390842013888889,
+     "anchor_event_areas": [
+      83,
+      62,
+      60,
+      59,
+      56,
+      35,
+      28,
+      26,
+      26,
+      24,
+      18,
+      18,
+      11,
+      5,
+      3
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 8940,
+     "anchor_inside_hits": 175,
+     "anchor_edge_hits": 87,
+     "anchor_hit_total": 262,
+     "anchor_hit_fraction": 0.02930648769574944,
+     "anchor_seam_density": 0.056299922700334966,
+     "anchor_output_pixels": 3881,
+     "anchor_cut_events": 9,
+     "anchor_severe_events": 3,
+     "cut_events_per_100kpx": 6.103515625,
+     "severe_events_per_100kpx": 2.034505208333333,
+     "anchor_event_areas": [
+      82,
+      54,
+      54,
+      34,
+      27,
+      26,
+      19,
+      18,
+      12,
+      10,
+      2
+     ]
+    },
+    "samples": [
+     {
+      "id": "conflict_a",
+      "name": "互斥锚点 A（右向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9224925637245178,
+      "orientation_deg": 34.38481140136719
+     },
+     {
+      "id": "conflict_b",
+      "name": "互斥锚点 B（左向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9223668575286865,
+      "orientation_deg": 34.383094787597656
+     }
+    ],
+    "elapsed_sec": 2.33,
+    "seam_to_natural_ratio": 1.1638479102704387,
+    "interventions": {
+     "reroute": 0,
+     "resample": 6,
+     "unresolved": 6
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "conflict_a",
+     "name": "互斥锚点 A（右向箭头）",
+     "role": "与 B 条纹方向完全一致，但局部箭头朝右，和 B 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "right"
+     }
+    },
+    {
+     "id": "conflict_b",
+     "name": "互斥锚点 B（左向箭头）",
+     "role": "与 A 条纹方向完全一致，但局部箭头朝左，和 A 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "left"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/conflict_adapt_s707/result.png",
+    "seams": "output/runs/conflict_adapt_s707/seams.png",
+    "provenance_id": "output/runs/conflict_adapt_s707/provenance_id.png",
+    "provenance_xy": "output/runs/conflict_adapt_s707/provenance_xy.png",
+    "tile_grid": "output/runs/conflict_adapt_s707/tile_grid.png",
+    "straight": "output/runs/conflict_adapt_s707/straight.png",
+    "naive_tile": "output/runs/conflict_adapt_s707/naive_tile.png",
+    "tileid": "output/runs/conflict_adapt_s707/tileid.png",
+    "patch_wall": "output/runs/conflict_adapt_s707/patch_wall.png",
+    "tile2x2": "output/runs/conflict_adapt_s707/tile2x2.png",
+    "comparison": "output/runs/conflict_adapt_s707/comparison.png",
+    "sample_0": "output/runs/conflict_adapt_s707/sample_0.png",
+    "sample_1": "output/runs/conflict_adapt_s707/sample_1.png",
+    "source_map_npz": "output/runs/conflict_adapt_s707/source_map.npz"
+   }
+  },
+  {
+   "run_id": "conflict_adapt_s606",
+   "title": "互斥锚点 A/B · 自适应(重排+重采样) · seed 606",
+   "group": "conflict",
+   "created_at": "2026-11-26T10:51:38+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 606,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "warning",
+   "warnings": [
+    "8/100 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "1/100 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "同种子硬切基线会切断 10 次锚点，最小割减少 2 次；8 次接缝切到真值锚点（2 次严重）：部分独特标记/方向箭头可能被切边或错位。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.08621834457874529,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.09831126154193387,
+     "seam_pair_count": 12734,
+     "closure_seam_rmse": 0.1395901515715382,
+     "closure_pair_count": 132
+    },
+    "straight_seam": {
+     "seam_rmse": 0.11467900827168855,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.06266223197152718,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 14.272661558929327,
+    "periodic": {
+     "edge_lr_rmse": 0.10836241394281387,
+     "edge_tb_rmse": 0.10998751223087311,
+     "edge_rmse": 0.1091779867973627
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.07991641759872437,
+     "edge_tb_rmse": 0.08047837764024734,
+     "edge_rmse": 0.08019788983950876
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1420443280974912
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 81,
+     "max_source_iou": 0.9113392440503967
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.40917837619781494,
+     "autocorr_lag": [
+      41,
+      11
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.002,
+     "dup_pair_rmse_median": 0.19987276196479797
+    },
+    "orientation": {
+     "orientation_coherence": 0.8958795070648193,
+     "orientation_deg": 33.97151184082031
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 12734,
+     "anchor_inside_hits": 163,
+     "anchor_edge_hits": 38,
+     "anchor_hit_total": 201,
+     "anchor_hit_fraction": 0.01578451389979582,
+     "anchor_seam_density": 0.04404646660212972,
+     "anchor_output_pixels": 4132,
+     "anchor_cut_events": 8,
+     "anchor_severe_events": 2,
+     "cut_events_per_100kpx": 5.425347222222222,
+     "severe_events_per_100kpx": 1.3563368055555556,
+     "anchor_event_areas": [
+      68,
+      42,
+      30,
+      26,
+      26,
+      26,
+      18,
+      17,
+      10
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 2,
+     "seam_pairs": 8940,
+     "anchor_inside_hits": 167,
+     "anchor_edge_hits": 35,
+     "anchor_hit_total": 202,
+     "anchor_hit_fraction": 0.022595078299776285,
+     "anchor_seam_density": 0.05006784260515604,
+     "anchor_output_pixels": 3685,
+     "anchor_cut_events": 10,
+     "anchor_severe_events": 2,
+     "cut_events_per_100kpx": 6.781684027777778,
+     "severe_events_per_100kpx": 1.3563368055555556,
+     "anchor_event_areas": [
+      71,
+      50,
+      34,
+      30,
+      28,
+      28,
+      18,
+      17,
+      15,
+      14,
+      10,
+      10
+     ]
+    },
+    "samples": [
+     {
+      "id": "conflict_a",
+      "name": "互斥锚点 A（右向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9224925637245178,
+      "orientation_deg": 34.38481140136719
+     },
+     {
+      "id": "conflict_b",
+      "name": "互斥锚点 B（左向箭头）",
+      "natural_adj_rmse": 0.08621834457874529,
+      "orientation_coherence": 0.9223668575286865,
+      "orientation_deg": 34.383094787597656
+     }
+    ],
+    "elapsed_sec": 2.44,
+    "seam_to_natural_ratio": 1.1402592107546652,
+    "interventions": {
+     "reroute": 0,
+     "resample": 2,
+     "unresolved": 8
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "conflict_a",
+     "name": "互斥锚点 A（右向箭头）",
+     "role": "与 B 条纹方向完全一致，但局部箭头朝右，和 B 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "right"
+     }
+    },
+    {
+     "id": "conflict_b",
+     "name": "互斥锚点 B（左向箭头）",
+     "role": "与 A 条纹方向完全一致，但局部箭头朝左，和 A 互斥",
+     "meta": {
+      "seed": 7404,
+      "kind": "conflict",
+      "anchor": "left"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/conflict_adapt_s606/result.png",
+    "seams": "output/runs/conflict_adapt_s606/seams.png",
+    "provenance_id": "output/runs/conflict_adapt_s606/provenance_id.png",
+    "provenance_xy": "output/runs/conflict_adapt_s606/provenance_xy.png",
+    "tile_grid": "output/runs/conflict_adapt_s606/tile_grid.png",
+    "straight": "output/runs/conflict_adapt_s606/straight.png",
+    "naive_tile": "output/runs/conflict_adapt_s606/naive_tile.png",
+    "tileid": "output/runs/conflict_adapt_s606/tileid.png",
+    "patch_wall": "output/runs/conflict_adapt_s606/patch_wall.png",
+    "tile2x2": "output/runs/conflict_adapt_s606/tile2x2.png",
+    "comparison": "output/runs/conflict_adapt_s606/comparison.png",
+    "sample_0": "output/runs/conflict_adapt_s606/sample_0.png",
+    "sample_1": "output/runs/conflict_adapt_s606/sample_1.png",
+    "source_map_npz": "output/runs/conflict_adapt_s606/source_map.npz"
+   }
+  },
+  {
+   "run_id": "markers_per_s505",
+   "title": "独特标记 · 周期闭环 · seed 505",
+   "group": "markers-periodic",
+   "created_at": "2026-11-26T10:51:35+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 505,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "failed-likely",
+   "warnings": [
+    "9/100 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "4/100 个图块的规划切缝 RMSE 超过失败线 0.17（已在图上红框标出）。",
+    "24/100 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "但同种子硬切基线仅切断 34 次，本次最小割在语义锚点上反而更差；24 段长接缝从独特标记/锚点笔画内部穿过（共 39 次锚点切割，24 次严重）：强语义结构超出 image quilting 可重排范围，标记被切碎/错位，这类损坏无法只看颜色 RMSE。"
+   ],
+   "infos": [
+    "实际接缝 RMSE=0.132 为自然相邻差 0.106 的 1.24 倍，近距离仍可能看到切痕。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.10640517312131392,
+     "seam_warn_line": 0.08512413849705114,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.131727761583771,
+     "seam_pair_count": 12689,
+     "closure_seam_rmse": 0.12200719662327826,
+     "closure_pair_count": 230
+    },
+    "straight_seam": {
+     "seam_rmse": 0.15215910417269327,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.1585571307236893,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 13.427617558613957,
+    "periodic": {
+     "edge_lr_rmse": 0.10996562987565994,
+     "edge_tb_rmse": 0.09345957636833191,
+     "edge_rmse": 0.10204688179679647
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.12101180851459503,
+     "edge_tb_rmse": 0.09175822883844376,
+     "edge_rmse": 0.10738582392369402
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1292880790000416
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 259,
+     "max_source_iou": 0.9692307692307692
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.17474980652332306,
+     "autocorr_lag": [
+      21,
+      0
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.21803994476795197
+    },
+    "orientation": {
+     "orientation_coherence": 0.39536982774734497,
+     "orientation_deg": -3.6221580505371094
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 12689,
+     "anchor_inside_hits": 2391,
+     "anchor_edge_hits": 1681,
+     "anchor_hit_total": 4072,
+     "anchor_hit_fraction": 0.32090787296083223,
+     "anchor_seam_density": 0.07258209424554153,
+     "anchor_output_pixels": 44522,
+     "anchor_cut_events": 39,
+     "anchor_severe_events": 24,
+     "cut_events_per_100kpx": 26.448567708333332,
+     "severe_events_per_100kpx": 16.276041666666664,
+     "anchor_event_areas": [
+      397,
+      337,
+      329,
+      297,
+      178,
+      177,
+      151,
+      138,
+      129,
+      124,
+      115,
+      97,
+      90,
+      90,
+      85,
+      78,
+      64,
+      55,
+      54,
+      50,
+      49,
+      48,
+      47,
+      40,
+      38,
+      38,
+      35,
+      30,
+      28,
+      28,
+      26,
+      19,
+      18,
+      16,
+      16,
+      16,
+      15,
+      14,
+      14,
+      8,
+      5,
+      4,
+      2,
+      2
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 8940,
+     "anchor_inside_hits": 1647,
+     "anchor_edge_hits": 1228,
+     "anchor_hit_total": 2875,
+     "anchor_hit_fraction": 0.32158836689038034,
+     "anchor_seam_density": 0.05499878375091219,
+     "anchor_output_pixels": 41110,
+     "anchor_cut_events": 34,
+     "anchor_severe_events": 18,
+     "cut_events_per_100kpx": 23.057725694444443,
+     "severe_events_per_100kpx": 12.20703125,
+     "anchor_event_areas": [
+      358,
+      264,
+      246,
+      235,
+      232,
+      230,
+      228,
+      214,
+      169,
+      130,
+      102,
+      96,
+      74,
+      71,
+      48,
+      47,
+      46,
+      44,
+      34,
+      33,
+      32,
+      27,
+      26,
+      26,
+      22,
+      22,
+      22,
+      22,
+      20,
+      18,
+      18,
+      14,
+      13,
+      12,
+      10,
+      6
+     ]
+    },
+    "samples": [
+     {
+      "id": "markers",
+      "name": "独特标记样本",
+      "natural_adj_rmse": 0.10640517312131392,
+      "orientation_coherence": 0.3238200843334198,
+      "orientation_deg": -8.66927433013916
+     }
+    ],
+    "elapsed_sec": 1.52,
+    "seam_to_natural_ratio": 1.2379826818531319,
+    "interventions": {
+     "reroute": 7,
+     "resample": 6,
+     "unresolved": 9
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "markers",
+     "name": "独特标记样本",
+     "role": "明显独特标记：每个大标记全局唯一，强结构下 quilting 可能失败",
+     "meta": {
+      "seed": 7303,
+      "kind": "markers",
+      "markers": 9
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/markers_per_s505/result.png",
+    "seams": "output/runs/markers_per_s505/seams.png",
+    "provenance_id": "output/runs/markers_per_s505/provenance_id.png",
+    "provenance_xy": "output/runs/markers_per_s505/provenance_xy.png",
+    "tile_grid": "output/runs/markers_per_s505/tile_grid.png",
+    "straight": "output/runs/markers_per_s505/straight.png",
+    "naive_tile": "output/runs/markers_per_s505/naive_tile.png",
+    "tileid": "output/runs/markers_per_s505/tileid.png",
+    "patch_wall": "output/runs/markers_per_s505/patch_wall.png",
+    "tile2x2": "output/runs/markers_per_s505/tile2x2.png",
+    "comparison": "output/runs/markers_per_s505/comparison.png",
+    "sample_0": "output/runs/markers_per_s505/sample_0.png",
+    "source_map_npz": "output/runs/markers_per_s505/source_map.npz"
+   }
+  },
+  {
+   "run_id": "markers_per_s404",
+   "title": "独特标记 · 周期闭环 · seed 404",
+   "group": "markers-periodic",
+   "created_at": "2026-11-26T10:51:33+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 404,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "failed-likely",
+   "warnings": [
+    "2/100 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "7/100 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "同种子硬切基线会切断 34 次锚点，最小割减少 10 次；19 段长接缝从独特标记/锚点笔画内部穿过（共 24 次锚点切割，19 次严重）：强语义结构超出 image quilting 可重排范围，标记被切碎/错位，这类损坏无法只看颜色 RMSE。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.10640517312131392,
+     "seam_warn_line": 0.08512413849705114,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.11758512095540918,
+     "seam_pair_count": 12351,
+     "closure_seam_rmse": 0.16683295287683525,
+     "closure_pair_count": 218
+    },
+    "straight_seam": {
+     "seam_rmse": 0.14921895203966795,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.13098706574617663,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 21.199606787111946,
+    "periodic": {
+     "edge_lr_rmse": 0.14631451666355133,
+     "edge_tb_rmse": 0.08983592689037323,
+     "edge_rmse": 0.12140517193830978
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.10924462229013443,
+     "edge_tb_rmse": 0.0921313464641571,
+     "edge_rmse": 0.1010509092007902
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1292880790000416
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 202,
+     "max_source_iou": 0.9692307692307692
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.2014365792274475,
+     "autocorr_lag": [
+      21,
+      0
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.17054307460784912
+    },
+    "orientation": {
+     "orientation_coherence": 0.33717864751815796,
+     "orientation_deg": -7.570999622344971
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 12351,
+     "anchor_inside_hits": 1868,
+     "anchor_edge_hits": 1094,
+     "anchor_hit_total": 2962,
+     "anchor_hit_fraction": 0.23981863816695004,
+     "anchor_seam_density": 0.07406385132026866,
+     "anchor_output_pixels": 32607,
+     "anchor_cut_events": 24,
+     "anchor_severe_events": 19,
+     "cut_events_per_100kpx": 16.276041666666664,
+     "severe_events_per_100kpx": 12.885199652777777,
+     "anchor_event_areas": [
+      298,
+      286,
+      246,
+      223,
+      204,
+      180,
+      165,
+      143,
+      132,
+      130,
+      128,
+      125,
+      112,
+      106,
+      96,
+      66,
+      65,
+      57,
+      43,
+      35,
+      29,
+      28,
+      26,
+      14,
+      7,
+      7,
+      3,
+      2
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 8940,
+     "anchor_inside_hits": 1632,
+     "anchor_edge_hits": 1108,
+     "anchor_hit_total": 2740,
+     "anchor_hit_fraction": 0.30648769574944074,
+     "anchor_seam_density": 0.05731966331908645,
+     "anchor_output_pixels": 38137,
+     "anchor_cut_events": 34,
+     "anchor_severe_events": 19,
+     "cut_events_per_100kpx": 23.057725694444443,
+     "severe_events_per_100kpx": 12.885199652777777,
+     "anchor_event_areas": [
+      392,
+      301,
+      251,
+      242,
+      232,
+      198,
+      166,
+      162,
+      150,
+      107,
+      96,
+      94,
+      92,
+      68,
+      61,
+      48,
+      42,
+      41,
+      40,
+      32,
+      30,
+      30,
+      30,
+      29,
+      28,
+      22,
+      22,
+      22,
+      22,
+      20,
+      18,
+      17,
+      14,
+      13,
+      10,
+      8,
+      8,
+      7,
+      4,
+      4,
+      3,
+      2
+     ]
+    },
+    "samples": [
+     {
+      "id": "markers",
+      "name": "独特标记样本",
+      "natural_adj_rmse": 0.10640517312131392,
+      "orientation_coherence": 0.3238200843334198,
+      "orientation_deg": -8.66927433013916
+     }
+    ],
+    "elapsed_sec": 1.37,
+    "seam_to_natural_ratio": 1.105069589251538,
+    "interventions": {
+     "reroute": 2,
+     "resample": 1,
+     "unresolved": 2
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "markers",
+     "name": "独特标记样本",
+     "role": "明显独特标记：每个大标记全局唯一，强结构下 quilting 可能失败",
+     "meta": {
+      "seed": 7303,
+      "kind": "markers",
+      "markers": 9
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/markers_per_s404/result.png",
+    "seams": "output/runs/markers_per_s404/seams.png",
+    "provenance_id": "output/runs/markers_per_s404/provenance_id.png",
+    "provenance_xy": "output/runs/markers_per_s404/provenance_xy.png",
+    "tile_grid": "output/runs/markers_per_s404/tile_grid.png",
+    "straight": "output/runs/markers_per_s404/straight.png",
+    "naive_tile": "output/runs/markers_per_s404/naive_tile.png",
+    "tileid": "output/runs/markers_per_s404/tileid.png",
+    "patch_wall": "output/runs/markers_per_s404/patch_wall.png",
+    "tile2x2": "output/runs/markers_per_s404/tile2x2.png",
+    "comparison": "output/runs/markers_per_s404/comparison.png",
+    "sample_0": "output/runs/markers_per_s404/sample_0.png",
+    "source_map_npz": "output/runs/markers_per_s404/source_map.npz"
+   }
+  },
+  {
+   "run_id": "stripes_per_s505",
+   "title": "定向条纹 · 周期闭环 · seed 505",
+   "group": "stripes-periodic",
+   "created_at": "2026-11-26T10:51:32+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 505,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "warning",
+   "warnings": [
+    "1/100 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.1031993517091722,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.10405959164226934,
+     "seam_pair_count": 13058,
+     "closure_seam_rmse": 0.10604222945432164,
+     "closure_pair_count": 142
+    },
+    "straight_seam": {
+     "seam_rmse": 0.12684797950016327,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.13408682823012483,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 17.965116943675557,
+    "periodic": {
+     "edge_lr_rmse": 0.11260285973548889,
+     "edge_tb_rmse": 0.08063523471355438,
+     "edge_rmse": 0.09793223447343626
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.12087934464216232,
+     "edge_tb_rmse": 0.09756029397249222,
+     "edge_rmse": 0.10984039994719101
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1940331627058996
+    },
+    "repetition": {
+     "distinct_source_tiles": 99,
+     "placements": 100,
+     "max_exact_reuse": 2,
+     "high_source_overlap_pairs": 291,
+     "max_source_iou": 1.0
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.46915149688720703,
+     "autocorr_lag": [
+      76,
+      1
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.1855972707271576
+    },
+    "orientation": {
+     "orientation_coherence": 0.7687442302703857,
+     "orientation_deg": 26.2949161529541
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "stripes",
+      "name": "定向条纹样本",
+      "natural_adj_rmse": 0.1031993517091722,
+      "orientation_coherence": 0.7764701247215271,
+      "orientation_deg": 26.719743728637695
+     }
+    ],
+    "elapsed_sec": 1.37,
+    "seam_to_natural_ratio": 1.0083357106304447,
+    "interventions": {
+     "reroute": 0,
+     "resample": 4,
+     "unresolved": 1
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "stripes",
+     "name": "定向条纹样本",
+     "role": "方向条纹：方向一致但相位/宽度有变化，检验结构连续性",
+     "meta": {
+      "seed": 7202,
+      "kind": "stripes",
+      "angle_deg": 28.0,
+      "period": 34.0
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/stripes_per_s505/result.png",
+    "seams": "output/runs/stripes_per_s505/seams.png",
+    "provenance_id": "output/runs/stripes_per_s505/provenance_id.png",
+    "provenance_xy": "output/runs/stripes_per_s505/provenance_xy.png",
+    "tile_grid": "output/runs/stripes_per_s505/tile_grid.png",
+    "straight": "output/runs/stripes_per_s505/straight.png",
+    "naive_tile": "output/runs/stripes_per_s505/naive_tile.png",
+    "tileid": "output/runs/stripes_per_s505/tileid.png",
+    "patch_wall": "output/runs/stripes_per_s505/patch_wall.png",
+    "tile2x2": "output/runs/stripes_per_s505/tile2x2.png",
+    "comparison": "output/runs/stripes_per_s505/comparison.png",
+    "sample_0": "output/runs/stripes_per_s505/sample_0.png",
+    "source_map_npz": "output/runs/stripes_per_s505/source_map.npz"
+   }
+  },
+  {
+   "run_id": "stripes_per_s404",
+   "title": "定向条纹 · 周期闭环 · seed 404",
+   "group": "stripes-periodic",
+   "created_at": "2026-11-26T10:51:31+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 404,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "warning",
+   "warnings": [
+    "2/100 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.1031993517091722,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.10642855621532031,
+     "seam_pair_count": 11989,
+     "closure_seam_rmse": 0.10425851348189256,
+     "closure_pair_count": 202
+    },
+    "straight_seam": {
+     "seam_rmse": 0.11812984827839643,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.10891808115117506,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 9.905449159216476,
+    "periodic": {
+     "edge_lr_rmse": 0.10946300625801086,
+     "edge_tb_rmse": 0.09169330447912216,
+     "edge_rmse": 0.10096982674379096
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.12337592989206314,
+     "edge_tb_rmse": 0.09858079254627228,
+     "edge_rmse": 0.1116686901861539
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1940331627058996
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 282,
+     "max_source_iou": 0.9393939393939394
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.4409642219543457,
+     "autocorr_lag": [
+      74,
+      5
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.18806472420692444
+    },
+    "orientation": {
+     "orientation_coherence": 0.7682647705078125,
+     "orientation_deg": 26.59575080871582
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "stripes",
+      "name": "定向条纹样本",
+      "natural_adj_rmse": 0.1031993517091722,
+      "orientation_coherence": 0.7764701247215271,
+      "orientation_deg": 26.719743728637695
+     }
+    ],
+    "elapsed_sec": 1.38,
+    "seam_to_natural_ratio": 1.0312909379048076,
+    "interventions": {
+     "reroute": 0,
+     "resample": 8,
+     "unresolved": 2
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "stripes",
+     "name": "定向条纹样本",
+     "role": "方向条纹：方向一致但相位/宽度有变化，检验结构连续性",
+     "meta": {
+      "seed": 7202,
+      "kind": "stripes",
+      "angle_deg": 28.0,
+      "period": 34.0
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/stripes_per_s404/result.png",
+    "seams": "output/runs/stripes_per_s404/seams.png",
+    "provenance_id": "output/runs/stripes_per_s404/provenance_id.png",
+    "provenance_xy": "output/runs/stripes_per_s404/provenance_xy.png",
+    "tile_grid": "output/runs/stripes_per_s404/tile_grid.png",
+    "straight": "output/runs/stripes_per_s404/straight.png",
+    "naive_tile": "output/runs/stripes_per_s404/naive_tile.png",
+    "tileid": "output/runs/stripes_per_s404/tileid.png",
+    "patch_wall": "output/runs/stripes_per_s404/patch_wall.png",
+    "tile2x2": "output/runs/stripes_per_s404/tile2x2.png",
+    "comparison": "output/runs/stripes_per_s404/comparison.png",
+    "sample_0": "output/runs/stripes_per_s404/sample_0.png",
+    "source_map_npz": "output/runs/stripes_per_s404/source_map.npz"
+   }
+  },
+  {
+   "run_id": "grain_per_s505",
+   "title": "随机颗粒 · 周期闭环 · seed 505",
+   "group": "grain-periodic",
+   "created_at": "2026-11-26T10:51:29+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 505,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "ok",
+   "warnings": [],
+   "infos": [
+    "6/100 个位置最佳重叠 RMSE 偏高；对高频随机纹理这是正常现象，最小割已把实际接缝压到自然噪声水平。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.13404101422315293,
+     "seam_warn_line": 0.10723281137852235,
+     "seam_fail_line": 0.20106152133472938,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.13988686944395026,
+     "seam_pair_count": 11502,
+     "closure_seam_rmse": 0.15840377254100282,
+     "closure_pair_count": 389
+    },
+    "straight_seam": {
+     "seam_rmse": 0.1650618960821678,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.14327207420778862,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 15.251870501769485,
+    "periodic": {
+     "edge_lr_rmse": 0.15337620675563812,
+     "edge_tb_rmse": 0.14249920845031738,
+     "edge_rmse": 0.1480376391457849
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.1533949226140976,
+     "edge_tb_rmse": 0.13658428192138672,
+     "edge_rmse": 0.14523303403800017
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1781451935131896
+    },
+    "repetition": {
+     "distinct_source_tiles": 95,
+     "placements": 100,
+     "max_exact_reuse": 2,
+     "high_source_overlap_pairs": 454,
+     "max_source_iou": 1.0
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.09587562084197998,
+     "autocorr_lag": [
+      116,
+      9
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.19785535335540771
+    },
+    "orientation": {
+     "orientation_coherence": 0.22497503459453583,
+     "orientation_deg": 3.3763740062713623
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "grain",
+      "name": "随机颗粒样本",
+      "natural_adj_rmse": 0.13404101422315293,
+      "orientation_coherence": 0.224087193608284,
+      "orientation_deg": -1.8858040571212769
+     }
+    ],
+    "elapsed_sec": 1.06,
+    "seam_to_natural_ratio": 1.0436124364969748,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "grain",
+     "name": "随机颗粒样本",
+     "role": "随机颗粒：近似平稳随机纹理，预期缝合容易、重复感低",
+     "meta": {
+      "seed": 7101,
+      "kind": "grain"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/grain_per_s505/result.png",
+    "seams": "output/runs/grain_per_s505/seams.png",
+    "provenance_id": "output/runs/grain_per_s505/provenance_id.png",
+    "provenance_xy": "output/runs/grain_per_s505/provenance_xy.png",
+    "tile_grid": "output/runs/grain_per_s505/tile_grid.png",
+    "straight": "output/runs/grain_per_s505/straight.png",
+    "naive_tile": "output/runs/grain_per_s505/naive_tile.png",
+    "tileid": "output/runs/grain_per_s505/tileid.png",
+    "patch_wall": "output/runs/grain_per_s505/patch_wall.png",
+    "tile2x2": "output/runs/grain_per_s505/tile2x2.png",
+    "comparison": "output/runs/grain_per_s505/comparison.png",
+    "sample_0": "output/runs/grain_per_s505/sample_0.png",
+    "source_map_npz": "output/runs/grain_per_s505/source_map.npz"
+   }
+  },
+  {
+   "run_id": "grain_per_s404",
+   "title": "随机颗粒 · 周期闭环 · seed 404",
+   "group": "grain-periodic",
+   "created_at": "2026-11-26T10:51:28+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 404,
+    "periodic": true,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "ok",
+   "warnings": [],
+   "infos": [
+    "12/100 个位置最佳重叠 RMSE 偏高；对高频随机纹理这是正常现象，最小割已把实际接缝压到自然噪声水平。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.13404101422315293,
+     "seam_warn_line": 0.10723281137852235,
+     "seam_fail_line": 0.20106152133472938,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.13293831093716532,
+     "seam_pair_count": 11434,
+     "closure_seam_rmse": 0.14665590130677844,
+     "closure_pair_count": 184
+    },
+    "straight_seam": {
+     "seam_rmse": 0.1680455452041297,
+     "seam_pair_count": 8940,
+     "closure_seam_rmse": 0.17640587079278702,
+     "closure_pair_count": 126
+    },
+    "seam_improvement_vs_straight_pct": 20.891499518370825,
+    "periodic": {
+     "edge_lr_rmse": 0.13516879081726074,
+     "edge_tb_rmse": 0.12738893926143646,
+     "edge_rmse": 0.1313364836158528
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.15610429644584656,
+     "edge_tb_rmse": 0.13292434811592102,
+     "edge_rmse": 0.14497833233089574
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1781451935131896
+    },
+    "repetition": {
+     "distinct_source_tiles": 100,
+     "placements": 100,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 352,
+     "max_source_iou": 0.9113392440503967
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.07424691319465637,
+     "autocorr_lag": [
+      24,
+      105
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.2009727656841278
+    },
+    "orientation": {
+     "orientation_coherence": 0.2280907928943634,
+     "orientation_deg": 6.534371376037598
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "grain",
+      "name": "随机颗粒样本",
+      "natural_adj_rmse": 0.13404101422315293,
+      "orientation_coherence": 0.224087193608284,
+      "orientation_deg": -1.8858040571212769
+     }
+    ],
+    "elapsed_sec": 1.03,
+    "seam_to_natural_ratio": 0.9917733889706936,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "anchors_y": [
+    0,
+    38,
+    77,
+    115,
+    154,
+    192,
+    230,
+    269,
+    307,
+    346
+   ],
+   "n_placements": 100,
+   "samples": [
+    {
+     "id": "grain",
+     "name": "随机颗粒样本",
+     "role": "随机颗粒：近似平稳随机纹理，预期缝合容易、重复感低",
+     "meta": {
+      "seed": 7101,
+      "kind": "grain"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/grain_per_s404/result.png",
+    "seams": "output/runs/grain_per_s404/seams.png",
+    "provenance_id": "output/runs/grain_per_s404/provenance_id.png",
+    "provenance_xy": "output/runs/grain_per_s404/provenance_xy.png",
+    "tile_grid": "output/runs/grain_per_s404/tile_grid.png",
+    "straight": "output/runs/grain_per_s404/straight.png",
+    "naive_tile": "output/runs/grain_per_s404/naive_tile.png",
+    "tileid": "output/runs/grain_per_s404/tileid.png",
+    "patch_wall": "output/runs/grain_per_s404/patch_wall.png",
+    "tile2x2": "output/runs/grain_per_s404/tile2x2.png",
+    "comparison": "output/runs/grain_per_s404/comparison.png",
+    "sample_0": "output/runs/grain_per_s404/sample_0.png",
+    "source_map_npz": "output/runs/grain_per_s404/source_map.npz"
+   }
+  },
+  {
+   "run_id": "markers_std_s303",
+   "title": "独特标记 · 常规拼接 · seed 303",
+   "group": "markers",
+   "created_at": "2026-11-26T10:51:27+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 303,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "failed-likely",
+   "warnings": [
+    "4/81 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "11/81 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "同种子硬切基线会切断 40 次锚点，最小割减少 4 次；13 段长接缝从独特标记/锚点笔画内部穿过（共 36 次锚点切割，13 次严重）：强语义结构超出 image quilting 可重排范围，标记被切碎/错位，这类损坏无法只看颜色 RMSE。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.10640517312131392,
+     "seam_warn_line": 0.08512413849705114,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.12170931130745549,
+     "seam_pair_count": 9066
+    },
+    "straight_seam": {
+     "seam_rmse": 0.15127677693687552,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 19.545277357249542,
+    "periodic": {
+     "edge_lr_rmse": 0.19904227554798126,
+     "edge_tb_rmse": 0.22390486299991608,
+     "edge_rmse": 0.21183863567622607
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.22136884927749634,
+     "edge_tb_rmse": 0.24291464686393738,
+     "edge_rmse": 0.2323915801954476
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1292880790000416
+    },
+    "repetition": {
+     "distinct_source_tiles": 81,
+     "placements": 81,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 178,
+     "max_source_iou": 0.9692307692307692
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.15821100771427155,
+     "autocorr_lag": [
+      21,
+      0
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.1985170543193817
+    },
+    "orientation": {
+     "orientation_coherence": 0.3826608657836914,
+     "orientation_deg": -0.18540233373641968
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 9066,
+     "anchor_inside_hits": 1637,
+     "anchor_edge_hits": 809,
+     "anchor_hit_total": 2446,
+     "anchor_hit_fraction": 0.2697992499448489,
+     "anchor_seam_density": 0.05071293720190779,
+     "anchor_output_pixels": 40256,
+     "anchor_cut_events": 36,
+     "anchor_severe_events": 13,
+     "cut_events_per_100kpx": 24.4140625,
+     "severe_events_per_100kpx": 8.81618923611111,
+     "anchor_event_areas": [
+      408,
+      343,
+      206,
+      203,
+      150,
+      131,
+      122,
+      93,
+      90,
+      86,
+      60,
+      60,
+      48,
+      37,
+      35,
+      34,
+      34,
+      34,
+      34,
+      30,
+      28,
+      25,
+      24,
+      22,
+      22,
+      22,
+      22,
+      22,
+      20,
+      18,
+      18,
+      17,
+      16,
+      16,
+      14,
+      13,
+      11,
+      4
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 6912,
+     "anchor_inside_hits": 1549,
+     "anchor_edge_hits": 909,
+     "anchor_hit_total": 2458,
+     "anchor_hit_fraction": 0.35561342592592593,
+     "anchor_seam_density": 0.04524820452594968,
+     "anchor_output_pixels": 44278,
+     "anchor_cut_events": 40,
+     "anchor_severe_events": 25,
+     "cut_events_per_100kpx": 27.12673611111111,
+     "severe_events_per_100kpx": 16.954210069444443,
+     "anchor_event_areas": [
+      254,
+      244,
+      232,
+      222,
+      192,
+      144,
+      129,
+      106,
+      100,
+      99,
+      98,
+      96,
+      83,
+      78,
+      75,
+      74,
+      64,
+      58,
+      58,
+      56,
+      51,
+      50,
+      50,
+      46,
+      43,
+      38,
+      36,
+      34,
+      26,
+      25,
+      24,
+      24,
+      20,
+      18,
+      17,
+      16,
+      16,
+      15,
+      14,
+      14
+     ]
+    },
+    "samples": [
+     {
+      "id": "markers",
+      "name": "独特标记样本",
+      "natural_adj_rmse": 0.10640517312131392,
+      "orientation_coherence": 0.3238200843334198,
+      "orientation_deg": -8.66927433013916
+     }
+    ],
+    "elapsed_sec": 1.06,
+    "seam_to_natural_ratio": 1.1438288923104625,
+    "interventions": {
+     "reroute": 5,
+     "resample": 0,
+     "unresolved": 4
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "markers",
+     "name": "独特标记样本",
+     "role": "明显独特标记：每个大标记全局唯一，强结构下 quilting 可能失败",
+     "meta": {
+      "seed": 7303,
+      "kind": "markers",
+      "markers": 9
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/markers_std_s303/result.png",
+    "seams": "output/runs/markers_std_s303/seams.png",
+    "provenance_id": "output/runs/markers_std_s303/provenance_id.png",
+    "provenance_xy": "output/runs/markers_std_s303/provenance_xy.png",
+    "tile_grid": "output/runs/markers_std_s303/tile_grid.png",
+    "straight": "output/runs/markers_std_s303/straight.png",
+    "naive_tile": "output/runs/markers_std_s303/naive_tile.png",
+    "tileid": "output/runs/markers_std_s303/tileid.png",
+    "patch_wall": "output/runs/markers_std_s303/patch_wall.png",
+    "comparison": "output/runs/markers_std_s303/comparison.png",
+    "sample_0": "output/runs/markers_std_s303/sample_0.png",
+    "source_map_npz": "output/runs/markers_std_s303/source_map.npz"
+   }
+  },
+  {
+   "run_id": "markers_std_s202",
+   "title": "独特标记 · 常规拼接 · seed 202",
+   "group": "markers",
+   "created_at": "2026-11-26T10:51:26+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 202,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "failed-likely",
+   "warnings": [
+    "4/81 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "2/81 个图块的规划切缝 RMSE 超过失败线 0.17（已在图上红框标出）。",
+    "14/81 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "同种子硬切基线会切断 33 次锚点，最小割减少 3 次；15 段长接缝从独特标记/锚点笔画内部穿过（共 30 次锚点切割，15 次严重）：强语义结构超出 image quilting 可重排范围，标记被切碎/错位，这类损坏无法只看颜色 RMSE。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.10640517312131392,
+     "seam_warn_line": 0.08512413849705114,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.12228570104820248,
+     "seam_pair_count": 9838
+    },
+    "straight_seam": {
+     "seam_rmse": 0.14283748979083616,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 14.38823152992163,
+    "periodic": {
+     "edge_lr_rmse": 0.2109217792749405,
+     "edge_tb_rmse": 0.30746403336524963,
+     "edge_rmse": 0.2636495105113359
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.2526127099990845,
+     "edge_tb_rmse": 0.36541539430618286,
+     "edge_rmse": 0.3141190790520568
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1292880790000416
+    },
+    "repetition": {
+     "distinct_source_tiles": 81,
+     "placements": 81,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 178,
+     "max_source_iou": 0.9692307692307692
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.19865082204341888,
+     "autocorr_lag": [
+      21,
+      0
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.22004984319210052
+    },
+    "orientation": {
+     "orientation_coherence": 0.40167924761772156,
+     "orientation_deg": -3.717601776123047
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 9838,
+     "anchor_inside_hits": 1808,
+     "anchor_edge_hits": 1230,
+     "anchor_hit_total": 3038,
+     "anchor_hit_fraction": 0.3088026021549095,
+     "anchor_seam_density": 0.05305568328625545,
+     "anchor_output_pixels": 45669,
+     "anchor_cut_events": 30,
+     "anchor_severe_events": 15,
+     "cut_events_per_100kpx": 20.345052083333332,
+     "severe_events_per_100kpx": 10.172526041666666,
+     "anchor_event_areas": [
+      305,
+      282,
+      274,
+      244,
+      185,
+      172,
+      128,
+      124,
+      122,
+      102,
+      90,
+      87,
+      78,
+      64,
+      47,
+      38,
+      38,
+      36,
+      35,
+      35,
+      35,
+      35,
+      33,
+      30,
+      30,
+      18,
+      16,
+      16,
+      13,
+      12,
+      9,
+      9,
+      6,
+      4,
+      4,
+      2
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 6912,
+     "anchor_inside_hits": 1273,
+     "anchor_edge_hits": 781,
+     "anchor_hit_total": 2054,
+     "anchor_hit_fraction": 0.29716435185185186,
+     "anchor_seam_density": 0.04021126930793589,
+     "anchor_output_pixels": 41369,
+     "anchor_cut_events": 33,
+     "anchor_severe_events": 19,
+     "cut_events_per_100kpx": 22.379557291666664,
+     "severe_events_per_100kpx": 12.885199652777777,
+     "anchor_event_areas": [
+      353,
+      238,
+      170,
+      154,
+      132,
+      125,
+      121,
+      108,
+      107,
+      98,
+      92,
+      90,
+      76,
+      44,
+      44,
+      43,
+      42,
+      42,
+      40,
+      38,
+      38,
+      32,
+      30,
+      30,
+      28,
+      26,
+      26,
+      25,
+      20,
+      18,
+      16,
+      15,
+      13,
+      10,
+      6,
+      2,
+      2
+     ]
+    },
+    "samples": [
+     {
+      "id": "markers",
+      "name": "独特标记样本",
+      "natural_adj_rmse": 0.10640517312131392,
+      "orientation_coherence": 0.3238200843334198,
+      "orientation_deg": -8.66927433013916
+     }
+    ],
+    "elapsed_sec": 1.12,
+    "seam_to_natural_ratio": 1.149245825753067,
+    "interventions": {
+     "reroute": 5,
+     "resample": 2,
+     "unresolved": 4
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "markers",
+     "name": "独特标记样本",
+     "role": "明显独特标记：每个大标记全局唯一，强结构下 quilting 可能失败",
+     "meta": {
+      "seed": 7303,
+      "kind": "markers",
+      "markers": 9
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/markers_std_s202/result.png",
+    "seams": "output/runs/markers_std_s202/seams.png",
+    "provenance_id": "output/runs/markers_std_s202/provenance_id.png",
+    "provenance_xy": "output/runs/markers_std_s202/provenance_xy.png",
+    "tile_grid": "output/runs/markers_std_s202/tile_grid.png",
+    "straight": "output/runs/markers_std_s202/straight.png",
+    "naive_tile": "output/runs/markers_std_s202/naive_tile.png",
+    "tileid": "output/runs/markers_std_s202/tileid.png",
+    "patch_wall": "output/runs/markers_std_s202/patch_wall.png",
+    "comparison": "output/runs/markers_std_s202/comparison.png",
+    "sample_0": "output/runs/markers_std_s202/sample_0.png",
+    "source_map_npz": "output/runs/markers_std_s202/source_map.npz"
+   }
+  },
+  {
+   "run_id": "markers_std_s101",
+   "title": "独特标记 · 常规拼接 · seed 101",
+   "group": "markers",
+   "created_at": "2026-11-26T10:51:25+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 101,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "failed-likely",
+   "warnings": [
+    "4/81 个图块在切缝重排与来源重采样后仍无解，说明局部锚点/强结构互斥，结果在这些位置可能断裂。",
+    "7/81 个位置找不到低重叠代价候选：样本缺少所需结构，输出只能勉强拼合。",
+    "但同种子硬切基线仅切断 34 次，本次最小割在语义锚点上反而更差；26 段长接缝从独特标记/锚点笔画内部穿过（共 41 次锚点切割，26 次严重）：强语义结构超出 image quilting 可重排范围，标记被切碎/错位，这类损坏无法只看颜色 RMSE。"
+   ],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.10640517312131392,
+     "seam_warn_line": 0.08512413849705114,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.12187217091917911,
+     "seam_pair_count": 8795
+    },
+    "straight_seam": {
+     "seam_rmse": 0.13718660959426682,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 11.163216818595183,
+    "periodic": {
+     "edge_lr_rmse": 0.2925153374671936,
+     "edge_tb_rmse": 0.2758136987686157,
+     "edge_rmse": 0.28428719552766607
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.2758670449256897,
+     "edge_tb_rmse": 0.2371591478586197,
+     "edge_rmse": 0.25724218927798287
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1292880790000416
+    },
+    "repetition": {
+     "distinct_source_tiles": 81,
+     "placements": 81,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 193,
+     "max_source_iou": 0.9113392440503967
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.1085514947772026,
+     "autocorr_lag": [
+      81,
+      1
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0003333333333333333,
+     "dup_pair_rmse_median": 0.21133551001548767
+    },
+    "orientation": {
+     "orientation_coherence": 0.3901466727256775,
+     "orientation_deg": -3.2963569164276123
+    },
+    "feature_cuts": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 8795,
+     "anchor_inside_hits": 1721,
+     "anchor_edge_hits": 980,
+     "anchor_hit_total": 2701,
+     "anchor_hit_fraction": 0.30710631040363845,
+     "anchor_seam_density": 0.04865435820698458,
+     "anchor_output_pixels": 45443,
+     "anchor_cut_events": 41,
+     "anchor_severe_events": 26,
+     "cut_events_per_100kpx": 27.804904513888886,
+     "severe_events_per_100kpx": 17.63237847222222,
+     "anchor_event_areas": [
+      239,
+      224,
+      193,
+      163,
+      144,
+      128,
+      109,
+      107,
+      100,
+      98,
+      74,
+      72,
+      71,
+      62,
+      60,
+      60,
+      59,
+      58,
+      56,
+      54,
+      54,
+      50,
+      46,
+      46,
+      42,
+      40,
+      38,
+      36,
+      34,
+      34,
+      34,
+      26,
+      26,
+      26,
+      24,
+      22,
+      22,
+      20,
+      16,
+      16,
+      14,
+      6,
+      2
+     ]
+    },
+    "feature_cuts_straight": {
+     "available": true,
+     "anchored_samples": 1,
+     "seam_pairs": 6912,
+     "anchor_inside_hits": 1284,
+     "anchor_edge_hits": 845,
+     "anchor_hit_total": 2129,
+     "anchor_hit_fraction": 0.3080150462962963,
+     "anchor_seam_density": 0.046330736024760406,
+     "anchor_output_pixels": 36833,
+     "anchor_cut_events": 34,
+     "anchor_severe_events": 21,
+     "cut_events_per_100kpx": 23.057725694444443,
+     "severe_events_per_100kpx": 14.241536458333332,
+     "anchor_event_areas": [
+      238,
+      173,
+      149,
+      147,
+      136,
+      133,
+      106,
+      106,
+      106,
+      102,
+      98,
+      98,
+      94,
+      84,
+      78,
+      76,
+      66,
+      66,
+      52,
+      43,
+      42,
+      39,
+      30,
+      28,
+      27,
+      24,
+      23,
+      22,
+      19,
+      18,
+      18,
+      18,
+      16,
+      14,
+      10,
+      9,
+      8,
+      2
+     ]
+    },
+    "samples": [
+     {
+      "id": "markers",
+      "name": "独特标记样本",
+      "natural_adj_rmse": 0.10640517312131392,
+      "orientation_coherence": 0.3238200843334198,
+      "orientation_deg": -8.66927433013916
+     }
+    ],
+    "elapsed_sec": 1.12,
+    "seam_to_natural_ratio": 1.1453594533437867,
+    "interventions": {
+     "reroute": 4,
+     "resample": 0,
+     "unresolved": 4
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "markers",
+     "name": "独特标记样本",
+     "role": "明显独特标记：每个大标记全局唯一，强结构下 quilting 可能失败",
+     "meta": {
+      "seed": 7303,
+      "kind": "markers",
+      "markers": 9
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/markers_std_s101/result.png",
+    "seams": "output/runs/markers_std_s101/seams.png",
+    "provenance_id": "output/runs/markers_std_s101/provenance_id.png",
+    "provenance_xy": "output/runs/markers_std_s101/provenance_xy.png",
+    "tile_grid": "output/runs/markers_std_s101/tile_grid.png",
+    "straight": "output/runs/markers_std_s101/straight.png",
+    "naive_tile": "output/runs/markers_std_s101/naive_tile.png",
+    "tileid": "output/runs/markers_std_s101/tileid.png",
+    "patch_wall": "output/runs/markers_std_s101/patch_wall.png",
+    "comparison": "output/runs/markers_std_s101/comparison.png",
+    "sample_0": "output/runs/markers_std_s101/sample_0.png",
+    "source_map_npz": "output/runs/markers_std_s101/source_map.npz"
+   }
+  },
+  {
+   "run_id": "stripes_std_s303",
+   "title": "定向条纹 · 常规拼接 · seed 303",
+   "group": "stripes",
+   "created_at": "2026-11-26T10:51:24+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 303,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "ok",
+   "warnings": [],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.1031993517091722,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.0984979474179865,
+     "seam_pair_count": 9132
+    },
+    "straight_seam": {
+     "seam_rmse": 0.11424224190330796,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 13.78149992771245,
+    "periodic": {
+     "edge_lr_rmse": 0.15790066123008728,
+     "edge_tb_rmse": 0.20876334607601166,
+     "edge_rmse": 0.18508748402005928
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.1483457237482071,
+     "edge_tb_rmse": 0.21190060675144196,
+     "edge_rmse": 0.1829047851971192
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1940331627058996
+    },
+    "repetition": {
+     "distinct_source_tiles": 81,
+     "placements": 81,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 245,
+     "max_source_iou": 0.883651414118188
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.4865439236164093,
+     "autocorr_lag": [
+      61,
+      30
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.1880953013896942
+    },
+    "orientation": {
+     "orientation_coherence": 0.7828648686408997,
+     "orientation_deg": 26.898338317871094
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "stripes",
+      "name": "定向条纹样本",
+      "natural_adj_rmse": 0.1031993517091722,
+      "orientation_coherence": 0.7764701247215271,
+      "orientation_deg": 26.719743728637695
+     }
+    ],
+    "elapsed_sec": 0.83,
+    "seam_to_natural_ratio": 0.9544434706873468,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "stripes",
+     "name": "定向条纹样本",
+     "role": "方向条纹：方向一致但相位/宽度有变化，检验结构连续性",
+     "meta": {
+      "seed": 7202,
+      "kind": "stripes",
+      "angle_deg": 28.0,
+      "period": 34.0
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/stripes_std_s303/result.png",
+    "seams": "output/runs/stripes_std_s303/seams.png",
+    "provenance_id": "output/runs/stripes_std_s303/provenance_id.png",
+    "provenance_xy": "output/runs/stripes_std_s303/provenance_xy.png",
+    "tile_grid": "output/runs/stripes_std_s303/tile_grid.png",
+    "straight": "output/runs/stripes_std_s303/straight.png",
+    "naive_tile": "output/runs/stripes_std_s303/naive_tile.png",
+    "tileid": "output/runs/stripes_std_s303/tileid.png",
+    "patch_wall": "output/runs/stripes_std_s303/patch_wall.png",
+    "comparison": "output/runs/stripes_std_s303/comparison.png",
+    "sample_0": "output/runs/stripes_std_s303/sample_0.png",
+    "source_map_npz": "output/runs/stripes_std_s303/source_map.npz"
+   }
+  },
+  {
+   "run_id": "stripes_std_s202",
+   "title": "定向条纹 · 常规拼接 · seed 202",
+   "group": "stripes",
+   "created_at": "2026-11-26T10:51:23+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 202,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "ok",
+   "warnings": [],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.1031993517091722,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.0929060518748692,
+     "seam_pair_count": 9276
+    },
+    "straight_seam": {
+     "seam_rmse": 0.11029492056819157,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 15.765792843172166,
+    "periodic": {
+     "edge_lr_rmse": 0.12723524868488312,
+     "edge_tb_rmse": 0.20500993728637695,
+     "edge_rmse": 0.17061342692482948
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.14721155166625977,
+     "edge_tb_rmse": 0.21372516453266144,
+     "edge_rmse": 0.1835070664831481
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1940331627058996
+    },
+    "repetition": {
+     "distinct_source_tiles": 81,
+     "placements": 81,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 243,
+     "max_source_iou": 0.9113392440503967
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.4909660816192627,
+     "autocorr_lag": [
+      54,
+      43
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.18813112378120422
+    },
+    "orientation": {
+     "orientation_coherence": 0.7814542651176453,
+     "orientation_deg": 26.84745216369629
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "stripes",
+      "name": "定向条纹样本",
+      "natural_adj_rmse": 0.1031993517091722,
+      "orientation_coherence": 0.7764701247215271,
+      "orientation_deg": 26.719743728637695
+     }
+    ],
+    "elapsed_sec": 0.8,
+    "seam_to_natural_ratio": 0.9002580959683669,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "stripes",
+     "name": "定向条纹样本",
+     "role": "方向条纹：方向一致但相位/宽度有变化，检验结构连续性",
+     "meta": {
+      "seed": 7202,
+      "kind": "stripes",
+      "angle_deg": 28.0,
+      "period": 34.0
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/stripes_std_s202/result.png",
+    "seams": "output/runs/stripes_std_s202/seams.png",
+    "provenance_id": "output/runs/stripes_std_s202/provenance_id.png",
+    "provenance_xy": "output/runs/stripes_std_s202/provenance_xy.png",
+    "tile_grid": "output/runs/stripes_std_s202/tile_grid.png",
+    "straight": "output/runs/stripes_std_s202/straight.png",
+    "naive_tile": "output/runs/stripes_std_s202/naive_tile.png",
+    "tileid": "output/runs/stripes_std_s202/tileid.png",
+    "patch_wall": "output/runs/stripes_std_s202/patch_wall.png",
+    "comparison": "output/runs/stripes_std_s202/comparison.png",
+    "sample_0": "output/runs/stripes_std_s202/sample_0.png",
+    "source_map_npz": "output/runs/stripes_std_s202/source_map.npz"
+   }
+  },
+  {
+   "run_id": "stripes_std_s101",
+   "title": "定向条纹 · 常规拼接 · seed 101",
+   "group": "stripes",
+   "created_at": "2026-11-26T10:51:22+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 101,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "ok",
+   "warnings": [],
+   "infos": [],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.1031993517091722,
+     "seam_warn_line": 0.085,
+     "seam_fail_line": 0.17,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.0988331849205101,
+     "seam_pair_count": 9172
+    },
+    "straight_seam": {
+     "seam_rmse": 0.10880851376399826,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 9.167783382396243,
+    "periodic": {
+     "edge_lr_rmse": 0.12700243294239044,
+     "edge_tb_rmse": 0.2074866145849228,
+     "edge_rmse": 0.17201789616955365
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.14303478598594666,
+     "edge_tb_rmse": 0.20806987583637238,
+     "edge_rmse": 0.17853854378342088
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1940331627058996
+    },
+    "repetition": {
+     "distinct_source_tiles": 81,
+     "placements": 81,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 170,
+     "max_source_iou": 0.9393939393939394
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.4953126907348633,
+     "autocorr_lag": [
+      77,
+      0
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0003333333333333333,
+     "dup_pair_rmse_median": 0.18757596611976624
+    },
+    "orientation": {
+     "orientation_coherence": 0.7763288021087646,
+     "orientation_deg": 26.793155670166016
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "stripes",
+      "name": "定向条纹样本",
+      "natural_adj_rmse": 0.1031993517091722,
+      "orientation_coherence": 0.7764701247215271,
+      "orientation_deg": 26.719743728637695
+     }
+    ],
+    "elapsed_sec": 0.87,
+    "seam_to_natural_ratio": 0.9576919165057697,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "stripes",
+     "name": "定向条纹样本",
+     "role": "方向条纹：方向一致但相位/宽度有变化，检验结构连续性",
+     "meta": {
+      "seed": 7202,
+      "kind": "stripes",
+      "angle_deg": 28.0,
+      "period": 34.0
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/stripes_std_s101/result.png",
+    "seams": "output/runs/stripes_std_s101/seams.png",
+    "provenance_id": "output/runs/stripes_std_s101/provenance_id.png",
+    "provenance_xy": "output/runs/stripes_std_s101/provenance_xy.png",
+    "tile_grid": "output/runs/stripes_std_s101/tile_grid.png",
+    "straight": "output/runs/stripes_std_s101/straight.png",
+    "naive_tile": "output/runs/stripes_std_s101/naive_tile.png",
+    "tileid": "output/runs/stripes_std_s101/tileid.png",
+    "patch_wall": "output/runs/stripes_std_s101/patch_wall.png",
+    "comparison": "output/runs/stripes_std_s101/comparison.png",
+    "sample_0": "output/runs/stripes_std_s101/sample_0.png",
+    "source_map_npz": "output/runs/stripes_std_s101/source_map.npz"
+   }
+  },
+  {
+   "run_id": "grain_std_s303",
+   "title": "随机颗粒 · 常规拼接 · seed 303",
+   "group": "grain",
+   "created_at": "2026-11-26T10:51:21+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 303,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "ok",
+   "warnings": [],
+   "infos": [
+    "8/81 个位置最佳重叠 RMSE 偏高；对高频随机纹理这是正常现象，最小割已把实际接缝压到自然噪声水平。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.13404101422315293,
+     "seam_warn_line": 0.10723281137852235,
+     "seam_fail_line": 0.20106152133472938,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.1292622732250649,
+     "seam_pair_count": 8335
+    },
+    "straight_seam": {
+     "seam_rmse": 0.1621854105316885,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 20.299691074981705,
+    "periodic": {
+     "edge_lr_rmse": 0.24304752051830292,
+     "edge_tb_rmse": 0.20095579326152802,
+     "edge_rmse": 0.22299700454878857
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.22665774822235107,
+     "edge_tb_rmse": 0.20648601651191711,
+     "edge_rmse": 0.21680660719197006
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1781451935131896
+    },
+    "repetition": {
+     "distinct_source_tiles": 81,
+     "placements": 81,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 196,
+     "max_source_iou": 0.9393939393939394
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.10131826251745224,
+     "autocorr_lag": [
+      64,
+      241
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.2018263339996338
+    },
+    "orientation": {
+     "orientation_coherence": 0.2212614268064499,
+     "orientation_deg": 4.852077960968018
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "grain",
+      "name": "随机颗粒样本",
+      "natural_adj_rmse": 0.13404101422315293,
+      "orientation_coherence": 0.224087193608284,
+      "orientation_deg": -1.8858040571212769
+     }
+    ],
+    "elapsed_sec": 0.9,
+    "seam_to_natural_ratio": 0.9643486657738032,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "grain",
+     "name": "随机颗粒样本",
+     "role": "随机颗粒：近似平稳随机纹理，预期缝合容易、重复感低",
+     "meta": {
+      "seed": 7101,
+      "kind": "grain"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/grain_std_s303/result.png",
+    "seams": "output/runs/grain_std_s303/seams.png",
+    "provenance_id": "output/runs/grain_std_s303/provenance_id.png",
+    "provenance_xy": "output/runs/grain_std_s303/provenance_xy.png",
+    "tile_grid": "output/runs/grain_std_s303/tile_grid.png",
+    "straight": "output/runs/grain_std_s303/straight.png",
+    "naive_tile": "output/runs/grain_std_s303/naive_tile.png",
+    "tileid": "output/runs/grain_std_s303/tileid.png",
+    "patch_wall": "output/runs/grain_std_s303/patch_wall.png",
+    "comparison": "output/runs/grain_std_s303/comparison.png",
+    "sample_0": "output/runs/grain_std_s303/sample_0.png",
+    "source_map_npz": "output/runs/grain_std_s303/source_map.npz"
+   }
+  },
+  {
+   "run_id": "grain_std_s202",
+   "title": "随机颗粒 · 常规拼接 · seed 202",
+   "group": "grain",
+   "created_at": "2026-11-26T10:51:20+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 202,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "ok",
+   "warnings": [],
+   "infos": [
+    "6/81 个位置最佳重叠 RMSE 偏高；对高频随机纹理这是正常现象，最小割已把实际接缝压到自然噪声水平。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.13404101422315293,
+     "seam_warn_line": 0.10723281137852235,
+     "seam_fail_line": 0.20106152133472938,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.13253103181916764,
+     "seam_pair_count": 8182
+    },
+    "straight_seam": {
+     "seam_rmse": 0.16456650380980825,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 19.466581138324745,
+    "periodic": {
+     "edge_lr_rmse": 0.1928035467863083,
+     "edge_tb_rmse": 0.18984495103359222,
+     "edge_rmse": 0.19132996770805039
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.19672928750514984,
+     "edge_tb_rmse": 0.17384719848632812,
+     "edge_rmse": 0.18564113362052695
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1781451935131896
+    },
+    "repetition": {
+     "distinct_source_tiles": 81,
+     "placements": 81,
+     "max_exact_reuse": 1,
+     "high_source_overlap_pairs": 164,
+     "max_source_iou": 0.9692307692307692
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.1132824569940567,
+     "autocorr_lag": [
+      158,
+      42
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.20312434434890747
+    },
+    "orientation": {
+     "orientation_coherence": 0.22186297178268433,
+     "orientation_deg": 6.00869607925415
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "grain",
+      "name": "随机颗粒样本",
+      "natural_adj_rmse": 0.13404101422315293,
+      "orientation_coherence": 0.224087193608284,
+      "orientation_deg": -1.8858040571212769
+     }
+    ],
+    "elapsed_sec": 0.8,
+    "seam_to_natural_ratio": 0.9887349225702556,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "grain",
+     "name": "随机颗粒样本",
+     "role": "随机颗粒：近似平稳随机纹理，预期缝合容易、重复感低",
+     "meta": {
+      "seed": 7101,
+      "kind": "grain"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/grain_std_s202/result.png",
+    "seams": "output/runs/grain_std_s202/seams.png",
+    "provenance_id": "output/runs/grain_std_s202/provenance_id.png",
+    "provenance_xy": "output/runs/grain_std_s202/provenance_xy.png",
+    "tile_grid": "output/runs/grain_std_s202/tile_grid.png",
+    "straight": "output/runs/grain_std_s202/straight.png",
+    "naive_tile": "output/runs/grain_std_s202/naive_tile.png",
+    "tileid": "output/runs/grain_std_s202/tileid.png",
+    "patch_wall": "output/runs/grain_std_s202/patch_wall.png",
+    "comparison": "output/runs/grain_std_s202/comparison.png",
+    "sample_0": "output/runs/grain_std_s202/sample_0.png",
+    "source_map_npz": "output/runs/grain_std_s202/source_map.npz"
+   }
+  },
+  {
+   "run_id": "grain_std_s101",
+   "title": "随机颗粒 · 常规拼接 · seed 101",
+   "group": "grain",
+   "created_at": "2026-11-26T10:51:19+00:00",
+   "config": {
+    "out_w": 384,
+    "out_h": 384,
+    "patch": 64,
+    "overlap": 24,
+    "seed": 101,
+    "periodic": false,
+    "seam_mode": "mincut",
+    "policy": "adaptive",
+    "candidate_rel_tol": 0.18,
+    "candidate_abs_tol": 0.0002,
+    "seam_k": 12,
+    "resample_tries": 12,
+    "seam_warn_rmse": 0.085,
+    "seam_fail_rmse": 0.17,
+    "match_fail_rmse": 0.17
+   },
+   "config_notes": [],
+   "status": "ok",
+   "warnings": [],
+   "infos": [
+    "9/81 个位置最佳重叠 RMSE 偏高；对高频随机纹理这是正常现象，最小割已把实际接缝压到自然噪声水平。"
+   ],
+   "metrics": {
+    "thresholds": {
+     "natural_floor": 0.13404101422315293,
+     "seam_warn_line": 0.10723281137852235,
+     "seam_fail_line": 0.20106152133472938,
+     "config_warn": 0.085,
+     "config_fail": 0.17
+    },
+    "seam": {
+     "seam_rmse": 0.1323783658803052,
+     "seam_pair_count": 9026
+    },
+    "straight_seam": {
+     "seam_rmse": 0.16599964959786942,
+     "seam_pair_count": 6912
+    },
+    "seam_improvement_vs_straight_pct": 20.253828124945485,
+    "periodic": {
+     "edge_lr_rmse": 0.19563522934913635,
+     "edge_tb_rmse": 0.18108753859996796,
+     "edge_rmse": 0.18850177664770704
+    },
+    "periodic_straight": {
+     "edge_lr_rmse": 0.19932235777378082,
+     "edge_tb_rmse": 0.20890356600284576,
+     "edge_rmse": 0.20416917274310098
+    },
+    "naive_tile": {
+     "naive_tile_seam_rmse": 0.1781451935131896
+    },
+    "repetition": {
+     "distinct_source_tiles": 79,
+     "placements": 81,
+     "max_exact_reuse": 2,
+     "high_source_overlap_pairs": 356,
+     "max_source_iou": 1.0
+    },
+    "autocorrelation": {
+     "autocorr_peak": 0.09109556674957275,
+     "autocorr_lag": [
+      74,
+      116
+     ]
+    },
+    "duplicates": {
+     "dup_pair_rate": 0.0,
+     "dup_pair_rmse_median": 0.19849373400211334
+    },
+    "orientation": {
+     "orientation_coherence": 0.2232632339000702,
+     "orientation_deg": 5.254423141479492
+    },
+    "feature_cuts": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "feature_cuts_straight": {
+     "available": false,
+     "anchored_samples": 0,
+     "seam_pairs": 0,
+     "anchor_inside_hits": 0,
+     "anchor_edge_hits": 0,
+     "anchor_hit_total": 0,
+     "anchor_hit_fraction": 0.0,
+     "anchor_seam_density": 0.0
+    },
+    "samples": [
+     {
+      "id": "grain",
+      "name": "随机颗粒样本",
+      "natural_adj_rmse": 0.13404101422315293,
+      "orientation_coherence": 0.224087193608284,
+      "orientation_deg": -1.8858040571212769
+     }
+    ],
+    "elapsed_sec": 0.94,
+    "seam_to_natural_ratio": 0.9875959731244667,
+    "interventions": {
+     "reroute": 0,
+     "resample": 0,
+     "unresolved": 0
+    }
+   },
+   "anchors_x": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "anchors_y": [
+    0,
+    40,
+    80,
+    120,
+    160,
+    200,
+    240,
+    280,
+    320
+   ],
+   "n_placements": 81,
+   "samples": [
+    {
+     "id": "grain",
+     "name": "随机颗粒样本",
+     "role": "随机颗粒：近似平稳随机纹理，预期缝合容易、重复感低",
+     "meta": {
+      "seed": 7101,
+      "kind": "grain"
+     }
+    }
+   ],
+   "files": {
+    "result": "output/runs/grain_std_s101/result.png",
+    "seams": "output/runs/grain_std_s101/seams.png",
+    "provenance_id": "output/runs/grain_std_s101/provenance_id.png",
+    "provenance_xy": "output/runs/grain_std_s101/provenance_xy.png",
+    "tile_grid": "output/runs/grain_std_s101/tile_grid.png",
+    "straight": "output/runs/grain_std_s101/straight.png",
+    "naive_tile": "output/runs/grain_std_s101/naive_tile.png",
+    "tileid": "output/runs/grain_std_s101/tileid.png",
+    "patch_wall": "output/runs/grain_std_s101/patch_wall.png",
+    "comparison": "output/runs/grain_std_s101/comparison.png",
+    "sample_0": "output/runs/grain_std_s101/sample_0.png",
+    "source_map_npz": "output/runs/grain_std_s101/source_map.npz"
+   }
+  }
+ ]
+}

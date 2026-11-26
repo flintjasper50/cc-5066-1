@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>样本驱动纹理扩展工作室 · Quilt Studio</title>
+<link rel="stylesheet" href="style.css">
+<script>
+  // file:// 直接打开时读取预生成 manifest；http 模式走 /api/manifest
+  if (location.protocol === 'file:') {
+    document.write('<script src="../web/data/manifest.js"><\/script>');
+  }
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">QS</span>
+    <div>
+      <h1>样本驱动纹理扩展工作室</h1>
+      <p>重叠相似度选块 · DP 最小割接缝 · 周期闭环求解 · 来源追溯 · 种子可复现</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <span id="mode-pill" class="pill"></span>
+    <button id="btn-refresh" class="btn ghost">刷新列表</button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- 左：生成控制 + 全部实验 -->
+  <aside class="col left">
+    <section class="card" id="generate-card">
+      <h2>生成新纹理</h2>
+      <div id="server-notice" class="notice warn hidden">
+        直接打开 HTML 为只读模式。要在线调参生成，请运行
+        <code>python3 cli.py serve</code> 后访问
+        <code>http://127.0.0.1:8765</code>。
+      </div>
+      <div class="form-row">
+        <label>样本组</label>
+        <select id="f-sample">
+          <option value="grain">随机颗粒</option>
+          <option value="stripes">定向条纹</option>
+          <option value="markers">独特标记（强结构压力）</option>
+          <option value="conflict">互斥锚点 A/B（双样片）</option>
+          <option value="upload">上传自己的纹理…</option>
+        </select>
+      </div>
+      <div class="form-row hidden" id="upload-row">
+        <label>图片（1–2 张）</label>
+        <input type="file" id="f-files" accept="image/*" multiple>
+        <div id="upload-status" class="hint"></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row">
+          <label>种子 seed</label>
+          <div class="seed-line">
+            <input type="number" id="f-seed" value="20261126">
+            <button class="btn mini" id="btn-dice" title="随机种子">🎲</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>画布 W×H</label>
+          <select id="f-size">
+            <option value="256">256×256</option>
+            <option value="320">320×320</option>
+            <option value="384" selected>384×384</option>
+            <option value="512">512×512（较慢）</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>图块 <span id="v-patch">64</span>px</label>
+          <input type="range" id="f-patch" min="32" max="128" step="4" value="64">
+        </div>
+        <div class="form-row">
+          <label>重叠 <span id="v-overlap">24</span>px</label>
+          <input type="range" id="f-overlap" min="8" max="48" step="2" value="24">
+        </div>
+        <div class="form-row">
+          <label>冲突策略</label>
+          <select id="f-policy">
+            <option value="adaptive" selected>自适应：重排→重采样</option>
+            <option value="reroute">仅切缝重排</option>
+            <option value="resample">仅来源重采样</option>
+            <option value="off">经典（不干预）</option>
+          </select>
+        </div>
+        <div class="form-row check">
+          <label><input type="checkbox" id="f-periodic"> 周期连接（首尾纳入求解）</label>
+        </div>
+      </div>
+      <button id="btn-generate" class="btn primary block">生成（同种子可复现）</button>
+      <div id="gen-status" class="hint"></div>
+    </section>
+
+    <section class="card grow">
+      <h2>全部真实实验 <span id="run-count" class="count"></span></h2>
+      <p class="hint">每个样本 × 多个种子都保留，不以单张“最好看”结果代表整类。</p>
+      <div id="run-groups"></div>
+    </section>
+  </aside>
+
+  <!-- 中：查看器 -->
+  <section class="col center">
+    <div class="card viewer-card">
+      <div class="viewer-toolbar">
+        <div class="seg" id="layer-seg">
+          <button data-layer="result" class="active">结果</button>
+          <button data-layer="seams">接缝路径</button>
+          <button data-layer="provenance_id">来源追溯</button>
+          <button data-layer="provenance_xy">坐标追溯</button>
+          <button data-layer="tile_grid">图块编号</button>
+        </div>
+        <label class="toggle"><input type="checkbox" id="t-seams" checked> 叠加接缝</label>
+        <label class="toggle"><input type="checkbox" id="t-boxes"> 图块框</label>
+      </div>
+      <div class="stage" id="stage">
+        <img id="view-img" alt="生成结果">
+        <canvas id="overlay"></canvas>
+        <div id="hover-tip" class="hover-tip hidden"></div>
+      </div>
+      <div class="sample-strip" id="sample-strip"></div>
+    </div>
+  </section>
+
+  <!-- 右：检查器 -->
+  <aside class="col right">
+    <div class="tabs">
+      <button data-tab="inspect" class="active">图块/候选追溯</button>
+      <button data-tab="metrics">指标与失败</button>
+      <button data-tab="about">原理与限制</button>
+    </div>
+
+    <section class="card tab-panel" id="tab-inspect">
+      <div id="inspect-empty" class="hint">在中间图上点击任意图块，查看所选图块、
+        候选代价、随机抽取值与接缝决策。</div>
+      <div id="inspect-body" class="hidden"></div>
+    </section>
+
+    <section class="card tab-panel hidden" id="tab-metrics">
+      <div id="metrics-body"></div>
+    </section>
+
+    <section class="card tab-panel hidden" id="tab-about">
+      <div class="prose">
+        <h3>这是什么</h3>
+        <p>从你提供的小纹理中枚举 B×B 图块，只在与已合成区域的<strong>重叠条带</strong>上
+        计算 SSD 相似度；在容差候选池中用带种子的随机抽取选块，再用动态规划最小割
+        在重叠区找最低代价切缝，而不是直线硬切，也不用模糊掩盖接缝。</p>
+        <h3>周期连接如何求解</h3>
+        <p>勾选“周期连接”后，网格按环面布置：最后一列图块的右重叠条带会与画布第 0 列
+        比较并做<strong>反向闭合切缝</strong>，最后一行同理。首尾约束在放置当时就进入
+        候选代价与最小割，而不是生成后裁掉一圈。可用 2×2 平铺检验。</p>
+        <h3>两张样片锚点互斥时</h3>
+        <p>“重排”会对外观容差内的候选预先计算切缝代价并改选最容易缝合的来源；
+        “重采样”会重新抽取来源（同样片→邻接来源→任意来源）。所有尝试与随机数都记录在案。</p>
+        <h3>生成限制（重要）</h3>
+        <ul>
+          <li>全局像素指标无法判断语义：被切半的圆圈/箭头可能像素误差不高但视觉已坏。</li>
+          <li>独特且唯一的大标记必然被复制或切碎；patch 小于标记尺度时大概率失败
+            （见 stress 组红色状态）。</li>
+          <li>强定向条纹在相位错配时，最小割也只能给出锯齿切痕，周期闭合处更明显。</li>
+          <li>候选池、阈值与随机种子决定结果；请查看同组所有种子而非只挑最好的一张。</li>
+          <li>这是图块拼接/重排，不是超分辨率：放大画布靠的是新增图块，不是把小图拉大。</li>
+        </ul>
+        <h3>复现</h3>
+        <p>每个 run 都保存了完整 <code>run.json</code>、<code>source_map.npz</code>
+        （逐像素来源 sample/y/x 与 tile id）和种子。命令见“指标与失败”页。</p>
+      </div>
+    </section>
+  </aside>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
